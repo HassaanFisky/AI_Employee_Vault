@@ -1,0 +1,10 @@
+2026-02-20 20:28:22,517 - FileSystemWatcher - INFO - ==================================================
+2026-02-20 20:28:22,517 - FileSystemWatcher - INFO - AI Employee File System Watcher Starting...
+2026-02-20 20:28:22,518 - FileSystemWatcher - INFO - Watching: C:\AI_Employee_Vault\Drop_Folder
+2026-02-20 20:28:22,518 - FileSystemWatcher - INFO - Action folder: C:\AI_Employee_Vault\Needs_Action
+2026-02-20 20:28:22,519 - FileSystemWatcher - INFO - Drop any file into Drop_Folder to test.
+2026-02-20 20:28:22,519 - FileSystemWatcher - INFO - Press Ctrl+C to stop.
+2026-02-20 20:28:22,520 - FileSystemWatcher - INFO - ==================================================
+2026-02-20 20:29:35,382 - FileSystemWatcher - INFO - New file detected: New Text Document.txt
+2026-02-20 20:29:35,392 - FileSystemWatcher - INFO - Metadata created: FILE_20260220_202935_New Text Document.md
+2026-02-20 20:32:32,874 - FileSystemWatcher - INFO - Stopping watcher...
