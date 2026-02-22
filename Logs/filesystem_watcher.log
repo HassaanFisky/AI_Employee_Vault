@@ -8,3 +8,5 @@
 2026-02-20 20:29:35,382 - FileSystemWatcher - INFO - New file detected: New Text Document.txt
 2026-02-20 20:29:35,392 - FileSystemWatcher - INFO - Metadata created: FILE_20260220_202935_New Text Document.md
 2026-02-20 20:32:32,874 - FileSystemWatcher - INFO - Stopping watcher...
+2026-02-22 08:38:51,144 - FileSystemWatcher - INFO - New file detected: test_watcher_simulation.txt
+2026-02-22 08:38:51,151 - FileSystemWatcher - INFO - Metadata created: FILE_20260222_083851_test_watcher_simulation.md

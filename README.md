@@ -1,76 +1,158 @@
-\# AI Employee Vault — Bronze Tier
+# AI Employee Vault — Personal AI Operations System
 
+GIAIC Hackathon 0 Submission | Bronze Tier | Muhammad Hassaan Aslam | Karachi, Pakistan
 
+## Overview
 
-\*\*Personal AI Employee Hackathon 0\*\* submission by Hassaan (fisky@HassaanHP)
+AI Employee Vault is a local-first Personal AI Employee system that automates daily business operations for AI freelance consultants. Built for Muhammad Hassaan Aslam — AI Freelance Consultant and Tech Solutions Provider in Karachi, Pakistan.
 
+This system handles:
+- Automated file intake and triage via filesystem monitoring
+- Intelligent task planning via Claude Code integration
+- Business dashboard via Obsidian markdown vault
+- Complete audit logging for operational transparency
+- Human-in-the-loop approval for sensitive actions
 
+## Architecture
 
-\## What This Is
+Input Sources → Watcher (Python) → Obsidian Vault → Claude Code → Actions
+                                         |
+                              Dashboard.md (single source of truth)
+                              Company_Handbook.md (operating rules)
+                              Business_Goals.md (strategic alignment)
+                              CLAUDE.md (AI employee instructions)
 
+## Features — Bronze Tier Complete
 
+| Feature | Status | Description |
+|---------|--------|-------------|
+| Obsidian Vault | Done | Structured knowledge base with operational folders |
+| Dashboard.md | Done | Real-time system status and activity log |
+| Company Handbook | Done | 7 rule categories governing AI behavior |
+| Business Goals | Done | Q1 2026 targets with alert thresholds |
+| CLAUDE.md | Done | Complete AI employee operating manual |
+| File System Watcher | Done | Python watchdog-based Drop_Folder monitor |
+| Orchestrator | Done | Automated Claude Code trigger on new items |
+| Agent Skills | Done | 4 skill files in .claude/skills/ |
+| Claude Code Integration | Done | Reads vault, creates plans, updates dashboard |
+| Human-in-the-Loop | Done | Pending_Approval to Approved to Rejected flow |
+| Audit Logging | Done | JSON daily logs plus watcher logs |
+| Git Version Control | Done | Full repo with .gitignore for security |
+| DRY_RUN Mode | Done | Safe development mode — no real external actions |
+| Test Suite | Done | Automated tests for watcher functionality |
 
-A local-first AI Employee system using:
+## Folder Structure
 
-\- \*\*Claude Code\*\* (reasoning engine)
+C:\AI_Employee_Vault\
+|
+|-- CLAUDE.md                    (AI Employee operating manual)
+|-- Dashboard.md                 (System status and metrics)
+|-- Company_Handbook.md          (Business rules and policies)
+|-- Business_Goals.md            (Strategic objectives)
+|-- README.md                    (This file)
+|-- .gitignore                   (Security exclusions)
+|
+|-- .claude\
+|   |-- CLAUDE.md                (Claude Code instructions)
+|   |-- skills\
+|       |-- filesystem_triage.md
+|       |-- process_files.md
+|       |-- update_dashboard.md
+|       |-- weekly_briefing.md
+|
+|-- Inbox\
+|-- Drop_Folder\                 (Drop files here to trigger watcher)
+|-- Needs_Action\
+|-- Plans\
+|-- Pending_Approval\
+|-- Approved\
+|-- Rejected\
+|-- Done\
+|-- Logs\
+|-- Accounting\
+|-- Briefings\
+|-- Active_Project\
+|
+|-- Scripts\
+    |-- ai_employee\
+        |-- filesystem_watcher.py
+        |-- orchestrator.py
+        |-- test_watcher.py
+        |-- pyproject.toml
+        |-- uv.lock
 
-\- \*\*Obsidian\*\* (knowledge base \& dashboard)
+## Installation
 
-\- \*\*Python Watchers\*\* (file system monitoring)
+Step 1 — Clone the repository
+git clone https://github.com/HassaanFisky/AI_Employee_Vault.git
+cd AI_Employee_Vault
 
-\- \*\*Agent Skills\*\* (task automation)
+Step 2 — Install Python dependencies
+cd Scripts/ai_employee
+py -3.13 -m uv sync
 
+Step 3 — Open vault in Obsidian
+File → Open folder as vault → select AI_Employee_Vault
 
+Step 4 — Authenticate Claude Code
+cd C:\AI_Employee_Vault
+claude
 
-\## Bronze Tier Requirements — ✅ Complete
+## Usage
 
+Start File System Watcher:
+cd C:\AI_Employee_Vault\Scripts\ai_employee
+py -3.13 -m uv run python filesystem_watcher.py
 
+Run Orchestrator:
+py -3.13 -m uv run python orchestrator.py
 
-\- \[x] Obsidian vault with Dashboard.md and Company\_Handbook.md
+Run Tests:
+py -3.13 -m uv run python test_watcher.py
 
-\- \[x] One working Watcher script (file system monitoring)
+Interactive Claude Code Session:
+cd C:\AI_Employee_Vault
+claude
 
-\- \[x] Claude Code successfully reading from and writing to the vault
+## Security
 
-\- \[x] Basic folder structure: /Inbox, /Needs\_Action, /Done, /Plans, /Logs
+| Measure | Implementation |
+|---------|---------------|
+| Credential Protection | .gitignore excludes .env, *.key, *.pem, credentials.json |
+| DRY_RUN Mode | All external actions disabled during development |
+| Human-in-the-Loop | Sensitive actions require approval flow |
+| Audit Trail | Every action logged with timestamp, actor, result |
+| No Hardcoded Secrets | All credentials via environment variables |
+| Executable Blocking | .exe and .bat files flagged for security review |
 
-\- \[x] All AI functionality implemented as Agent Skills
+## Hackathon Compliance — Bronze Tier
 
+| Requirement | Status |
+|-------------|--------|
+| Obsidian vault with Dashboard.md | Complete |
+| Company_Handbook.md with rules | Complete |
+| One working Watcher script | Complete |
+| Claude Code reads and writes vault | Complete |
+| Basic folder structure | Complete |
+| Agent Skills in .claude/skills/ | Complete |
+| CLAUDE.md at vault root | Complete |
+| GitHub repository | Complete |
+| Test suite | Complete |
 
+## Judging Criteria
 
-\## How to Run
+| Criteria | Weight | How Addressed |
+|----------|--------|---------------|
+| Functionality | 30% | Working watcher, orchestrator, Claude integration, dashboard updates |
+| Innovation | 25% | Vault-as-brain architecture, skill-based AI, automated triage |
+| Practicality | 20% | Real freelancer workflow — file intake, task planning, client tracking |
+| Security | 15% | DRY_RUN, HITL approval, .gitignore, no hardcoded secrets, audit logs |
+| Documentation | 10% | CLAUDE.md, README.md, Company Handbook, test suite, inline comments |
 
+## Author
 
-
-\### Prerequisites
-
-\- Python 3.13+
-
-\- Node.js 24+
-
-\- Claude Code installed (`npm install -g @anthropic-ai/claude-code`)
-
-\- Obsidian installed
-
-
-
-\### Setup
-
-1\. Clone this repo: `git clone https://github.com/YOUR\_USERNAME/AI\_Employee\_Vault.git`
-
-2\. Open `C:\\AI\_Employee\_Vault` in Obsidian as a vault
-
-3\. Navigate to `Scripts/ai\_employee`
-
-4\. Install dependencies: `py -3.13 -m uv sync`
-
-
-
-\### Run the Watcher
-
-```bash
-
-cd C:\\AI\_Employee\_Vault\\Scripts\\ai\_employee
-
-py -3.13 -m uv run python filesystem\_watcher.py
-
+Muhammad Hassaan Aslam
+AI Freelance Consultant and Tech Solutions Provider
+Karachi, Pakistan
+GitHub: https://github.com/HassaanFisky
+Hackathon: GIAIC Hackathon 0 — Personal AI Employee
