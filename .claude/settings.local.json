@@ -1,0 +1,8 @@
+{
+  "permissions": {
+    "allow": [
+      "mcp__filesystem__move_file",
+      "Bash(cd:*)"
+    ]
+  }
+}
