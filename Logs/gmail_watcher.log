@@ -41,3 +41,19 @@
 2026-02-23 06:39:30,967 - INFO - Watching for new emails... Press Ctrl+C to stop
 2026-02-23 06:39:31,161 - INFO - No new emails
 2026-02-23 06:40:14,024 - INFO - Gmail Watcher stopped
+2026-02-23 06:54:57,002 - INFO - ============================================================
+2026-02-23 06:54:57,002 - INFO - Gmail Watcher — Silver Tier
+2026-02-23 06:54:57,003 - INFO - Vault: C:\AI_Employee_Vault
+2026-02-23 06:54:57,003 - INFO - Check interval: 60s
+2026-02-23 06:54:57,003 - INFO - ============================================================
+2026-02-23 06:55:15,247 - INFO - "GET /?state=puUpcBkbQAWAzEkr3o9IaPJ61gz7HP&code=4/0AfrIepAsbeo7WJ9tPTNsynxvuEbSP2id3z8iflPE2UNNxIHWyR5bSYLkNtVGIwDVWxGbEA&scope=https://www.googleapis.com/auth/gmail.readonly HTTP/1.1" 200 65
+2026-02-23 06:55:15,727 - INFO - Authentication successful — token.json saved
+2026-02-23 06:55:15,739 - INFO - file_cache is only supported with oauth2client<4.0.0
+2026-02-23 06:55:15,747 - INFO - Connected to Gmail
+2026-02-23 06:55:17,364 - INFO - Starting from message ID: 19c8636f81913761
+2026-02-23 06:55:17,364 - INFO - Watching for new emails... Press Ctrl+C to stop
+2026-02-23 06:55:18,047 - INFO - 1 new email(s) found
+2026-02-23 06:55:18,396 - INFO - Created: EMAIL_20260223_065518_Security alert.md
+2026-02-23 06:55:18,413 - INFO - Dashboard updated
+2026-02-23 06:56:18,746 - INFO - No new emails
+2026-02-23 06:56:26,102 - INFO - Gmail Watcher stopped

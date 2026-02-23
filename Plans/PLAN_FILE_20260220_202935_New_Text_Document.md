@@ -1,6 +1,7 @@
 ---
 created: 2026-02-20
-status: pending
+status: completed
+resolved_at: 2026-02-23
 source_file: Needs_Action/FILE_20260220_202935_New Text Document.md
 original_file: New Text Document.txt
 priority: normal
@@ -19,8 +20,8 @@ Review and categorize the file `New Text Document.txt` that was auto-detected an
 
 ## Steps
 
-- [ ] Confirm the source file (`Needs_Action/FILE_20260220_202935_New_Text_Document.txt`) is truly empty
-- [ ] Classify the item: mark as **empty/test — no action required**
-- [ ] Move both files (`FILE_20260220_202935_New Text Document.md` and `FILE_20260220_202935_New_Text_Document.txt`) to `/Done`
-- [ ] Log the operation in `/Logs`
-- [ ] Update `Dashboard.md` — decrement Pending Actions, add completion entry
+- [x] Confirm the source file (`Needs_Action/FILE_20260220_202935_New_Text_Document.txt`) is truly empty
+- [x] Classify the item: mark as **empty/test — no action required**
+- [x] Move both files (`FILE_20260220_202935_New Text Document.md` and `FILE_20260220_202935_New_Text_Document.txt`) to `/Done`
+- [x] Log the operation in `/Logs`
+- [x] Update `Dashboard.md` — decrement Pending Actions, add completion entry
