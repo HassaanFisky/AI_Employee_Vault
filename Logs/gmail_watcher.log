@@ -1,0 +1,43 @@
+2026-02-23 05:58:55,339 - INFO - ============================================================
+2026-02-23 05:58:55,340 - INFO - Gmail Watcher — Silver Tier
+2026-02-23 05:58:55,340 - INFO - Vault: C:\AI_Employee_Vault
+2026-02-23 05:58:55,340 - INFO - Check interval: 60s
+2026-02-23 05:58:55,340 - INFO - ============================================================
+2026-02-23 06:00:30,925 - INFO - ============================================================
+2026-02-23 06:00:30,926 - INFO - Gmail Watcher — Silver Tier
+2026-02-23 06:00:30,926 - INFO - Vault: C:\AI_Employee_Vault
+2026-02-23 06:00:30,926 - INFO - Check interval: 60s
+2026-02-23 06:00:30,927 - INFO - ============================================================
+2026-02-23 06:10:39,611 - INFO - ============================================================
+2026-02-23 06:10:39,612 - INFO - Gmail Watcher — Silver Tier
+2026-02-23 06:10:39,612 - INFO - Vault: C:\AI_Employee_Vault
+2026-02-23 06:10:39,613 - INFO - Check interval: 60s
+2026-02-23 06:10:39,613 - INFO - ============================================================
+2026-02-23 06:24:37,797 - INFO - ============================================================
+2026-02-23 06:24:37,797 - INFO - Gmail Watcher — Silver Tier
+2026-02-23 06:24:37,797 - INFO - Vault: C:\AI_Employee_Vault
+2026-02-23 06:24:37,798 - INFO - Check interval: 60s
+2026-02-23 06:24:37,798 - INFO - ============================================================
+2026-02-23 06:30:57,476 - INFO - ============================================================
+2026-02-23 06:30:57,477 - INFO - Gmail Watcher — Silver Tier
+2026-02-23 06:30:57,477 - INFO - Vault: C:\AI_Employee_Vault
+2026-02-23 06:30:57,477 - INFO - Check interval: 60s
+2026-02-23 06:30:57,477 - INFO - ============================================================
+2026-02-23 06:35:25,506 - INFO - ============================================================
+2026-02-23 06:35:25,506 - INFO - Gmail Watcher — Silver Tier
+2026-02-23 06:35:25,506 - INFO - Vault: C:\AI_Employee_Vault
+2026-02-23 06:35:25,507 - INFO - Check interval: 60s
+2026-02-23 06:35:25,507 - INFO - ============================================================
+2026-02-23 06:39:07,340 - INFO - ============================================================
+2026-02-23 06:39:07,341 - INFO - Gmail Watcher — Silver Tier
+2026-02-23 06:39:07,341 - INFO - Vault: C:\AI_Employee_Vault
+2026-02-23 06:39:07,342 - INFO - Check interval: 60s
+2026-02-23 06:39:07,342 - INFO - ============================================================
+2026-02-23 06:39:29,274 - INFO - "GET /?state=2ZWS5QhGthiG973gV2Q8fZAcouAJWw&code=4/0AfrIepABl1xf0v80XC2iWEtHXLQ0zYwY3BjW-16GO7Wr_sX8Ohw7dHtpPDEoKlESHIGb0w&scope=https://www.googleapis.com/auth/gmail.readonly HTTP/1.1" 200 65
+2026-02-23 06:39:29,748 - INFO - Authentication successful — token.json saved
+2026-02-23 06:39:29,754 - INFO - file_cache is only supported with oauth2client<4.0.0
+2026-02-23 06:39:29,785 - INFO - Connected to Gmail
+2026-02-23 06:39:30,967 - INFO - Starting from message ID: 19c87a012b2c12ab
+2026-02-23 06:39:30,967 - INFO - Watching for new emails... Press Ctrl+C to stop
+2026-02-23 06:39:31,161 - INFO - No new emails
+2026-02-23 06:40:14,024 - INFO - Gmail Watcher stopped

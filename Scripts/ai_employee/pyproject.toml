@@ -7,3 +7,8 @@ requires-python = ">=3.13"
 dependencies = [
     "watchdog>=6.0.0",
 ]
+
+[tool.uv.workspace]
+members = [
+    "AI_Gmail/gmail_project",
+]

@@ -12,4 +12,4 @@ desktop.ini
 .venv/
 venv/
 node_modules/
-whatsapp_session/
+whatsapp_session/credentials.json.json 
