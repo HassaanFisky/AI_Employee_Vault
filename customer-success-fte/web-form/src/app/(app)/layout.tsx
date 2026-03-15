@@ -2,7 +2,6 @@
 
 import React from "react";
 import Link from "next/link";
-import Image from "next/image";
 import { usePathname } from "next/navigation";
 import {
   LayoutDashboard,
@@ -20,28 +19,33 @@ const navItems = [
   { label: "Knowledge Base", href: "/knowledge", icon: BookOpen },
 ];
 
+const AriaLogo = ({ className }: { className?: string }) => (
+  <svg
+    viewBox="0 0 24 24"
+    fill="none"
+    xmlns="http://www.w3.org/2000/svg"
+    className={className}
+  >
+    <path d="M12 2L2 22H6.5L12 11L17.5 22H22L12 2Z" fill="currentColor" />
+    <path d="M12 10L6.5 21H10.5L12 17L13.5 21H17.5L12 10Z" fill="currentColor" fillOpacity="0.4" />
+  </svg>
+);
+
 function AppSidebar() {
   const pathname = usePathname();
 
   return (
-    <aside className="w-64 shrink-0 h-screen fixed left-0 top-0 bg-bg-2 border-r border-bg-3 flex flex-col z-40">
+    <aside className="w-64 shrink-0 h-screen fixed left-0 top-0 bg-bg-2 border-r border-bg-3 flex flex-col z-40 shadow-[4px_0_24px_rgba(0,0,0,0.1)]">
       {/* Brand */}
-      <div className="flex items-center gap-3 px-6 py-5 border-b border-bg-3 group cursor-pointer">
-        <div className="w-8 h-8 rounded-lg overflow-hidden flex items-center justify-center bg-bg-1 relative animate-float">
-          <Image
-            src="/favicon.png"
-            alt="ARIA Logo"
-            width={32}
-            height={32}
-            className="object-contain group-hover:animate-pulse-glow transition-all duration-300"
-            priority
-          />
+      <div className="flex items-center gap-3 px-6 py-5 border-b border-white/5 group cursor-pointer transition-colors hover:bg-white/[0.02]">
+        <div className="w-8 h-8 rounded-lg flex items-center justify-center relative animate-float">
+          <AriaLogo className="w-8 h-8 text-accent-primary group-hover:animate-pulse-glow transition-all duration-300 drop-shadow-md" />
         </div>
         <div>
-          <p className="text-body-reg font-bold text-text-primary tracking-tight leading-none">
+          <p className="text-body-reg font-bold text-text-primary tracking-tight leading-none group-hover:text-accent-primary transition-colors">
             ARIA
           </p>
-          <p className="text-[10px] text-text-tertiary uppercase tracking-widest">
+          <p className="text-[10px] text-text-tertiary uppercase tracking-widest mt-0.5">
             Command Center
           </p>
         </div>
