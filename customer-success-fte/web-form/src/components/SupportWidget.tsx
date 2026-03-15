@@ -1,8 +1,20 @@
-// web-form/src/components/SupportWidget.tsx
 "use client";
 
 import { useCallback, useEffect, useRef, useState } from "react";
 import { v4 as uuidv4 } from "uuid";
+import { Button } from "@/components/atoms/Button";
+import { Textarea } from "@/components/atoms/Textarea";
+import { Badge } from "@/components/atoms/Badge";
+import { 
+  Bot, Send, X, Minimize2, Maximize2, 
+  MessageCircle, AlertCircle, CheckCircle2 
+} from "lucide-react";
+import { clsx, type ClassValue } from 'clsx';
+import { twMerge } from 'tailwind-merge';
+
+function cn(...inputs: ClassValue[]) {
+  return twMerge(clsx(inputs));
+}
 
 // ─── Types ────────────────────────────────────────────────────────────────────
 
@@ -22,55 +34,31 @@ type WidgetStatus = "idle" | "connecting" | "connected" | "error" | "escalated";
 const API_URL = process.env.NEXT_PUBLIC_API_URL ?? "http://localhost:8000";
 const WS_URL = process.env.NEXT_PUBLIC_WS_URL ?? "ws://localhost:8000";
 
-// ─── Helper: format timestamp ─────────────────────────────────────────────────
+// ─── Components ───────────────────────────────────────────────────────────────
 
-function formatTime(date: Date): string {
-  return date.toLocaleTimeString("en-US", { hour: "2-digit", minute: "2-digit" });
-}
-
-// ─── Typing Indicator ─────────────────────────────────────────────────────────
-
-function TypingIndicator() {
-  return (
-    <div style={{ display: "flex", alignItems: "center", gap: "6px", padding: "4px 0" }}>
-      <div style={{ display: "flex", gap: "4px", alignItems: "center" }}>
-        {[0, 1, 2].map((i) => (
-          <span
-            key={i}
-            style={{
-              width: "7px",
-              height: "7px",
-              borderRadius: "50%",
-              background: "var(--primary-light)",
-              display: "inline-block",
-              animation: `typingBounce 1.2s ease-in-out ${i * 0.2}s infinite`,
-            }}
-          />
-        ))}
-      </div>
-      <span style={{ color: "var(--text-muted)", fontSize: "0.8rem" }}>ARIA is typing…</span>
+const TypingIndicator = () => (
+  <div className="flex items-center gap-sm p-sm animate-fade-in">
+    <div className="flex gap-1 items-center">
+      {[0, 1, 2].map((i) => (
+        <span
+          key={i}
+          className="w-1.5 h-1.5 rounded-full bg-accent-primary animate-bounce"
+          style={{ animationDelay: `${i * 0.2}s` }}
+        />
+      ))}
     </div>
-  );
-}
+    <span className="text-body-sm text-text-tertiary">ARIA is thinking...</span>
+  </div>
+);
 
-// ─── Message Bubble ───────────────────────────────────────────────────────────
-
-function MessageBubble({ message }: { message: ChatMessage }) {
+const MessageBubble = ({ message }: { message: ChatMessage }) => {
   const isUser = message.role === "user";
   const isSystem = message.role === "system";
 
   if (isSystem) {
     return (
-      <div style={{ textAlign: "center", padding: "8px 0" }}>
-        <span
-          style={{
-            fontSize: "0.75rem",
-            color: "var(--text-muted)",
-            background: "var(--surface-3)",
-            padding: "4px 12px",
-            borderRadius: "20px",
-          }}
-        >
+      <div className="text-center py-sm animate-fade-in">
+        <span className="text-[10px] uppercase tracking-widest text-text-tertiary bg-bg-3 px-md py-1 rounded-full border border-bg-4">
           {message.content}
         </span>
       </div>
@@ -78,82 +66,32 @@ function MessageBubble({ message }: { message: ChatMessage }) {
   }
 
   return (
-    <div
-      style={{
-        display: "flex",
-        flexDirection: "column",
-        alignItems: isUser ? "flex-end" : "flex-start",
-        marginBottom: "4px",
-        animation: "fadeInUp 0.25s ease forwards",
-      }}
-    >
+    <div className={cn(
+      "flex flex-col mb-md animate-slide-up",
+      isUser ? "items-end" : "items-start"
+    )}>
       {!isUser && (
-        <div
-          style={{
-            display: "flex",
-            alignItems: "center",
-            gap: "6px",
-            marginBottom: "4px",
-            paddingLeft: "4px",
-          }}
-        >
-          <div
-            style={{
-              width: "22px",
-              height: "22px",
-              borderRadius: "50%",
-              background: "linear-gradient(135deg,#6366f1,#a78bfa)",
-              display: "flex",
-              alignItems: "center",
-              justifyContent: "center",
-              fontSize: "0.65rem",
-              fontWeight: 700,
-              color: "#fff",
-            }}
-          >
-            AI
+        <div className="flex items-center gap-sm mb-xs pl-1">
+          <div className="w-5 h-5 rounded-full bg-accent-primary flex items-center justify-center shadow-glow">
+            <Bot size={12} className="text-white" />
           </div>
-          <span style={{ fontSize: "0.75rem", color: "var(--text-muted)", fontWeight: 600 }}>
-            ARIA
-          </span>
+          <span className="text-body-sm font-semibold text-text-secondary">ARIA</span>
         </div>
       )}
-      <div
-        style={{
-          maxWidth: "82%",
-          padding: "10px 14px",
-          borderRadius: isUser
-            ? "var(--radius-md) var(--radius-sm) var(--radius-sm) var(--radius-md)"
-            : "var(--radius-sm) var(--radius-md) var(--radius-md) var(--radius-sm)",
-          background: isUser
-            ? "linear-gradient(135deg, var(--user-bubble), #7c3aed)"
-            : "var(--agent-bubble)",
-          border: isUser ? "none" : "1px solid var(--border)",
-          color: "var(--text-primary)",
-          fontSize: "0.9rem",
-          lineHeight: "1.55",
-          whiteSpace: "pre-wrap",
-          wordBreak: "break-word",
-        }}
-      >
+      <div className={cn(
+        "max-w-[85%] px-md py-sm rounded-sm text-body-reg leading-relaxed break-words",
+        isUser 
+          ? "bg-accent-primary text-white shadow-lg rounded-tr-none" 
+          : "bg-bg-3 text-text-primary border border-bg-4 rounded-tl-none"
+      )}>
         {message.content}
       </div>
-      <span
-        style={{
-          fontSize: "0.7rem",
-          color: "var(--text-muted)",
-          marginTop: "4px",
-          paddingLeft: isUser ? "0" : "4px",
-          paddingRight: isUser ? "4px" : "0",
-        }}
-      >
-        {formatTime(message.timestamp)}
+      <span className="text-[10px] text-text-tertiary mt-1 px-1">
+        {message.timestamp.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
       </span>
     </div>
   );
-}
-
-// ─── SupportWidget ────────────────────────────────────────────────────────────
+};
 
 export function SupportWidget() {
   const [messages, setMessages] = useState<ChatMessage[]>([]);
@@ -161,98 +99,63 @@ export function SupportWidget() {
   const [status, setStatus] = useState<WidgetStatus>("idle");
   const [isTyping, setIsTyping] = useState(false);
   const [sessionId] = useState<string>(() => uuidv4());
-  const [isOpen, setIsOpen] = useState(true);
+  const [isOpen, setIsOpen] = useState(false);
+  const [isMinimized, setIsMinimized] = useState(false);
 
   const wsRef = useRef<WebSocket | null>(null);
   const messagesEndRef = useRef<HTMLDivElement | null>(null);
-  const inputRef = useRef<HTMLTextAreaElement | null>(null);
 
-  // Auto-scroll to bottom
+  // Auto-scroll logic
   useEffect(() => {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
-  }, [messages, isTyping]);
+  }, [messages, isTyping, isOpen]);
 
-  // Connect WebSocket
+  // WebSocket Connection
   const connectWs = useCallback(() => {
     if (wsRef.current?.readyState === WebSocket.OPEN) return;
 
     setStatus("connecting");
     const ws = new WebSocket(`${WS_URL}/support/ws/${sessionId}`);
 
-    ws.onopen = () => {
-      setStatus("connected");
-    };
-
-    ws.onmessage = (event: MessageEvent) => {
+    ws.onopen = () => setStatus("connected");
+    
+    ws.onmessage = (event) => {
       try {
-        const data = JSON.parse(event.data as string) as {
-          type: string;
-          content: string;
-        };
-
+        const data = JSON.parse(event.data);
         if (data.type === "connected") {
-          setMessages([
-            {
-              id: uuidv4(),
-              role: "agent",
-              content: data.content,
-              timestamp: new Date(),
-            },
-          ]);
+          setMessages([{
+            id: uuidv4(),
+            role: "agent",
+            content: data.content,
+            timestamp: new Date(),
+          }]);
         }
-
         if (data.type === "agent_response") {
           setIsTyping(false);
-          setMessages((prev) => [
-            ...prev,
-            {
-              id: uuidv4(),
-              role: "agent",
-              content: data.content,
-              timestamp: new Date(),
-            },
-          ]);
+          setMessages(prev => [...prev, {
+            id: uuidv4(),
+            role: "agent",
+            content: data.content,
+            timestamp: new Date(),
+          }]);
         }
-
-        if (data.type === "error") {
-          setIsTyping(false);
-          setMessages((prev) => [
-            ...prev,
-            {
-              id: uuidv4(),
-              role: "system",
-              content: "⚠️ Something went wrong. Please try again.",
-              timestamp: new Date(),
-            },
-          ]);
-        }
-      } catch (_) {
-        // Ignore non-JSON messages (ping/pong)
-      }
+      } catch (e) { /* silent fail */ }
     };
 
-    ws.onerror = () => {
-      setStatus("error");
-    };
-
+    ws.onerror = () => setStatus("error");
     ws.onclose = () => {
       setStatus("idle");
-      // Attempt reconnect after 3 seconds
       setTimeout(connectWs, 3000);
     };
-
     wsRef.current = ws;
   }, [sessionId]);
 
   useEffect(() => {
     connectWs();
-    return () => {
-      wsRef.current?.close();
-    };
+    return () => wsRef.current?.close();
   }, [connectWs]);
 
-  // Send message
-  const sendMessage = useCallback(async () => {
+  const sendMessage = async () => {
     const text = inputText.trim();
     if (!text || status === "error") return;
 
@@ -263,309 +166,135 @@ export function SupportWidget() {
       timestamp: new Date(),
     };
 
-    setMessages((prev) => [...prev, userMsg]);
+    setMessages(prev => [...prev, userMsg]);
     setInputText("");
     setIsTyping(true);
-    inputRef.current?.focus();
 
     try {
-      const response = await fetch(`${API_URL}/support/message`, {
+      await fetch(`${API_URL}/support/message`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ session_id: sessionId, message: text }),
       });
-
-      if (!response.ok) {
-        throw new Error(`HTTP ${response.status}`);
-      }
     } catch (err) {
       setIsTyping(false);
-      setMessages((prev) => [
-        ...prev,
-        {
-          id: uuidv4(),
-          role: "system",
-          content: "⚠️ Failed to send message. Please check your connection.",
-          timestamp: new Date(),
-        },
-      ]);
+      setMessages(prev => [...prev, {
+        id: uuidv4(),
+        role: "system",
+        content: "Lost connection. Retrying...",
+        timestamp: new Date(),
+      }]);
     }
-  }, [inputText, sessionId, status]);
+  };
 
-  const handleKeyDown = (e: React.KeyboardEvent<HTMLTextAreaElement>) => {
+  const handleKeyDown = (e: React.KeyboardEvent) => {
     if (e.key === "Enter" && !e.shiftKey) {
       e.preventDefault();
       sendMessage();
     }
   };
 
-  // Status indicator
-  const statusColor =
-    status === "connected"
-      ? "var(--success)"
-      : status === "error"
-      ? "var(--error)"
-      : "var(--warning)";
-  const statusLabel =
-    status === "connected"
-      ? "Online"
-      : status === "connecting"
-      ? "Connecting…"
-      : status === "error"
-      ? "Disconnected"
-      : "Reconnecting…";
-
   if (!isOpen) {
     return (
       <button
         onClick={() => setIsOpen(true)}
-        style={{
-          position: "fixed",
-          bottom: "24px",
-          right: "24px",
-          width: "60px",
-          height: "60px",
-          borderRadius: "50%",
-          background: "linear-gradient(135deg,#6366f1,#a78bfa)",
-          border: "none",
-          cursor: "pointer",
-          boxShadow: "0 8px 24px rgba(99,102,241,0.5)",
-          display: "flex",
-          alignItems: "center",
-          justifyContent: "center",
-          fontSize: "1.6rem",
-          transition: "transform 0.2s ease",
-          zIndex: 9999,
-        }}
-        onMouseEnter={(e) =>
-          (e.currentTarget.style.transform = "scale(1.1)")
-        }
-        onMouseLeave={(e) =>
-          (e.currentTarget.style.transform = "scale(1)")
-        }
-        aria-label="Open support chat"
+        className="fixed bottom-xl right-xl w-14 h-14 rounded-full bg-accent-primary text-white flex items-center justify-center shadow-[0_0_20px_rgba(16,185,129,0.4)] hover:scale-110 active:scale-95 transition-all z-50 group overflow-hidden"
+        aria-label="Open AI Support"
       >
-        💬
+        <div className="absolute inset-0 bg-white/20 scale-0 group-hover:scale-100 transition-transform duration-slow rounded-full" />
+        <MessageCircle size={24} className="relative z-10" />
       </button>
     );
   }
 
   return (
-    <>
-      {/* Keyframe animations injected inline */}
-      <style>{`
-        @keyframes fadeInUp {
-          from { opacity: 0; transform: translateY(8px); }
-          to   { opacity: 1; transform: translateY(0); }
-        }
-        @keyframes typingBounce {
-          0%, 60%, 100% { transform: translateY(0); }
-          30% { transform: translateY(-6px); }
-        }
-        @keyframes widgetIn {
-          from { opacity: 0; transform: scale(0.95) translateY(20px); }
-          to   { opacity: 1; transform: scale(1) translateY(0); }
-        }
-        textarea::-webkit-scrollbar { width: 4px; }
-        textarea::-webkit-scrollbar-track { background: transparent; }
-        textarea::-webkit-scrollbar-thumb { background: var(--surface-3); border-radius: 4px; }
-        .messages-scroll::-webkit-scrollbar { width: 4px; }
-        .messages-scroll::-webkit-scrollbar-track { background: transparent; }
-        .messages-scroll::-webkit-scrollbar-thumb { background: var(--surface-3); border-radius: 4px; }
-      `}</style>
-
-      <div
-        style={{
-          position: "fixed",
-          bottom: "24px",
-          right: "24px",
-          width: "min(420px, calc(100vw - 48px))",
-          height: "min(640px, calc(100vh - 48px))",
-          background: "var(--surface-2)",
-          borderRadius: "var(--radius-xl)",
-          border: "1px solid var(--border)",
-          boxShadow: "0 24px 60px rgba(0,0,0,0.6), var(--shadow-glow)",
-          display: "flex",
-          flexDirection: "column",
-          overflow: "hidden",
-          animation: "widgetIn 0.3s cubic-bezier(0.34,1.56,0.64,1) forwards",
-          zIndex: 9999,
-          fontFamily: "Inter, sans-serif",
-        }}
-      >
-        {/* ── Header ── */}
-        <div
-          style={{
-            padding: "16px 18px",
-            background: "linear-gradient(135deg,rgba(99,102,241,0.15),rgba(167,139,250,0.08))",
-            borderBottom: "1px solid var(--border)",
-            display: "flex",
-            alignItems: "center",
-            gap: "12px",
-          }}
-        >
-          <div style={{ position: "relative", flexShrink: 0 }}>
-            <div
-              style={{
-                width: "42px",
-                height: "42px",
-                borderRadius: "50%",
-                background: "linear-gradient(135deg,#6366f1,#a78bfa)",
-                display: "flex",
-                alignItems: "center",
-                justifyContent: "center",
-                fontSize: "1.2rem",
-                boxShadow: "0 4px 12px rgba(99,102,241,0.4)",
-              }}
-            >
-              🤖
+    <div className={cn(
+      "fixed bottom-xl right-xl w-full max-w-[400px] border border-bg-3 bg-bg-2 shadow-2xl rounded-sm z-50 flex flex-col transition-all duration-base",
+      isMinimized ? "h-[64px]" : "h-[min(650px,calc(100vh-100px))]",
+      "animate-bounce-in"
+    )}>
+      {/* Header */}
+      <div className="p-md flex items-center justify-between border-b border-bg-3 bg-white/[0.02]">
+        <div className="flex items-center gap-md">
+          <div className="relative">
+            <div className="w-10 h-10 rounded-full bg-accent-primary flex items-center justify-center shadow-glow">
+              <Bot size={20} className="text-white" />
             </div>
-            <span
-              style={{
-                position: "absolute",
-                bottom: 1,
-                right: 1,
-                width: "10px",
-                height: "10px",
-                borderRadius: "50%",
-                background: statusColor,
-                border: "2px solid var(--surface-2)",
-              }}
-            />
+            <div className={cn(
+              "absolute -bottom-0.5 -right-0.5 w-3 h-3 rounded-full border-2 border-bg-2",
+              status === 'connected' ? "bg-success" : status === 'connecting' ? "bg-warning" : "bg-error"
+            )} />
           </div>
-          <div style={{ flex: 1 }}>
-            <div style={{ fontWeight: 700, fontSize: "0.95rem", color: "var(--text-primary)" }}>
-              ARIA — Support AI
-            </div>
-            <div style={{ fontSize: "0.75rem", color: "var(--text-muted)", marginTop: "1px" }}>
-              {statusLabel} · 24/7 Support
+          <div>
+            <h4 className="text-body-reg font-bold text-text-primary">ARIA</h4>
+            <div className="flex items-center gap-xs">
+              <span className="text-[10px] text-text-tertiary">AI Response Mode</span>
+              {status === 'connected' && <Badge variant="success" className="h-3 py-0 px-1 text-[8px]">ACTIVE</Badge>}
             </div>
           </div>
-          <button
+        </div>
+        <div className="flex items-center gap-xs">
+          <button 
+            onClick={() => setIsMinimized(!isMinimized)}
+            className="p-sm text-text-tertiary hover:text-text-primary hover:bg-bg-3 rounded-sm transition-colors"
+          >
+            {isMinimized ? <Maximize2 size={16} /> : <Minimize2 size={16} />}
+          </button>
+          <button 
             onClick={() => setIsOpen(false)}
-            style={{
-              background: "none",
-              border: "none",
-              cursor: "pointer",
-              color: "var(--text-muted)",
-              fontSize: "1.2rem",
-              padding: "4px",
-              borderRadius: "6px",
-              transition: "color 0.2s",
-              lineHeight: 1,
-            }}
-            onMouseEnter={(e) => (e.currentTarget.style.color = "var(--text-primary)")}
-            onMouseLeave={(e) => (e.currentTarget.style.color = "var(--text-muted)")}
-            aria-label="Close chat"
+            className="p-sm text-text-tertiary hover:text-error hover:bg-error/10 rounded-sm transition-colors"
           >
-            ✕
+            <X size={16} />
           </button>
-        </div>
-
-        {/* ── Messages ── */}
-        <div
-          className="messages-scroll"
-          style={{
-            flex: 1,
-            overflowY: "auto",
-            padding: "16px 14px",
-            display: "flex",
-            flexDirection: "column",
-            gap: "8px",
-          }}
-        >
-          {messages.map((msg) => (
-            <MessageBubble key={msg.id} message={msg} />
-          ))}
-          {isTyping && <TypingIndicator />}
-          <div ref={messagesEndRef} />
-        </div>
-
-        {/* ── Input ── */}
-        <div
-          style={{
-            padding: "12px 14px",
-            borderTop: "1px solid var(--border)",
-            background: "var(--surface)",
-            display: "flex",
-            gap: "10px",
-            alignItems: "flex-end",
-          }}
-        >
-          <textarea
-            ref={inputRef}
-            value={inputText}
-            onChange={(e) => setInputText(e.target.value)}
-            onKeyDown={handleKeyDown}
-            placeholder="Type a message… (Enter to send)"
-            rows={1}
-            style={{
-              flex: 1,
-              resize: "none",
-              background: "var(--surface-3)",
-              border: "1px solid var(--border)",
-              borderRadius: "var(--radius-md)",
-              padding: "10px 14px",
-              color: "var(--text-primary)",
-              fontSize: "0.9rem",
-              fontFamily: "inherit",
-              outline: "none",
-              maxHeight: "100px",
-              transition: "border-color var(--transition)",
-              lineHeight: "1.4",
-            }}
-            onFocus={(e) => (e.target.style.borderColor = "var(--primary)")}
-            onBlur={(e) => (e.target.style.borderColor = "var(--border)")}
-            onInput={(e) => {
-              const el = e.currentTarget;
-              el.style.height = "auto";
-              el.style.height = `${Math.min(el.scrollHeight, 100)}px`;
-            }}
-          />
-          <button
-            onClick={sendMessage}
-            disabled={!inputText.trim() || status === "error"}
-            style={{
-              width: "42px",
-              height: "42px",
-              border: "none",
-              borderRadius: "var(--radius-md)",
-              background:
-                !inputText.trim() || status === "error"
-                  ? "var(--surface-3)"
-                  : "linear-gradient(135deg,#6366f1,#7c3aed)",
-              color: !inputText.trim() || status === "error" ? "var(--text-muted)" : "#fff",
-              cursor: !inputText.trim() || status === "error" ? "not-allowed" : "pointer",
-              display: "flex",
-              alignItems: "center",
-              justifyContent: "center",
-              flexShrink: 0,
-              fontSize: "1.1rem",
-              transition: "all var(--transition)",
-              boxShadow:
-                inputText.trim() && status !== "error"
-                  ? "0 4px 12px rgba(99,102,241,0.4)"
-                  : "none",
-            }}
-            aria-label="Send message"
-          >
-            ↑
-          </button>
-        </div>
-
-        {/* ── Footer ── */}
-        <div
-          style={{
-            padding: "6px 16px 10px",
-            textAlign: "center",
-            fontSize: "0.68rem",
-            color: "var(--text-muted)",
-            background: "var(--surface)",
-          }}
-        >
-          Powered by ARIA · AI-assisted · Responses may not be 100% accurate
         </div>
       </div>
-    </>
+
+      {!isMinimized && (
+        <>
+          {/* Messages Area */}
+          <div className="flex-1 overflow-y-auto p-md space-y-md scrollbar-premium bg-bg-1/30">
+            {messages.map(msg => (
+              <MessageBubble key={msg.id} message={msg} />
+            ))}
+            {isTyping && <TypingIndicator />}
+            <div ref={messagesEndRef} />
+          </div>
+
+          {/* Input Area */}
+          <div className="p-md bg-bg-2 border-t border-bg-3">
+            <div className="flex gap-sm items-end relative">
+              <textarea
+                value={inputText}
+                onChange={(e) => setInputText(e.target.value)}
+                onKeyDown={handleKeyDown}
+                placeholder="Ask ARIA a question..."
+                className="flex-1 bg-bg-3 border border-bg-4 rounded-sm px-md py-sm text-body-reg text-text-primary placeholder:text-text-tertiary focus:border-accent-primary outline-none transition-colors resize-none scrollbar-premium h-[42px] max-h-[120px]"
+                onInput={(e) => {
+                  const el = e.currentTarget;
+                  el.style.height = "auto";
+                  el.style.height = `${Math.min(el.scrollHeight, 120)}px`;
+                }}
+              />
+              <Button 
+                size="sm" 
+                className="h-[42px] w-[42px] p-0 flex-shrink-0"
+                disabled={!inputText.trim() || status === 'error'}
+                onClick={sendMessage}
+              >
+                <Send size={18} />
+              </Button>
+            </div>
+            <div className="mt-sm flex items-center justify-between text-[10px] text-text-tertiary">
+              <p>⌘+Enter to send</p>
+              <p className="flex items-center gap-xs">
+                {status === 'connected' ? <CheckCircle2 size={10} className="text-success" /> : <AlertCircle size={10} className="text-error" />}
+                System Status: {status}
+              </p>
+            </div>
+          </div>
+        </>
+      )}
+    </div>
   );
 }
+

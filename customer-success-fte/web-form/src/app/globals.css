@@ -1,39 +1,86 @@
-/* web-form/src/app/globals.css */
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
-
-*, *::before, *::after {
-  box-sizing: border-box;
-  margin: 0;
-  padding: 0;
-}
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
 
 :root {
-  --primary: #6366f1;
-  --primary-dark: #4f46e5;
-  --primary-light: #818cf8;
-  --surface: #0f0f13;
-  --surface-2: #1a1a24;
-  --surface-3: #252535;
-  --border: rgba(255,255,255,0.08);
-  --text-primary: #f1f1f5;
-  --text-secondary: #9898b0;
-  --text-muted: #5c5c78;
-  --user-bubble: #4f46e5;
-  --agent-bubble: #1e1e2e;
-  --success: #22c55e;
-  --warning: #f59e0b;
-  --error: #ef4444;
-  --radius-sm: 8px;
-  --radius-md: 14px;
-  --radius-lg: 20px;
-  --radius-xl: 24px;
-  --shadow-glow: 0 0 40px rgba(99,102,241,0.15);
-  --transition: 0.2s cubic-bezier(0.4,0,0.2,1);
+  /* Backgrounds */
+  --bg-1: #0F172A;
+  --bg-2: #1E293B;
+  --bg-3: #334155;
+  --bg-4: #475569;
+
+  /* Text */
+  --text-primary: #F8FAFC;
+  --text-secondary: #CBD5E1;
+  --text-tertiary: #94A3B8;
+  --text-inverse: #0F172A;
+
+  /* Accents */
+  --accent-primary: #10B981;
+  --accent-hover: #059669;
+  --accent-light: #ECFDF5;
+  --accent-border: #A7F3D0;
+
+  /* Functional */
+  --success: #10B981;
+  --warning: #F59E0B;
+  --error: #EF4444;
+  --info: #3B82F6;
+
+  /* Transitions */
+  --ease-out: cubic-bezier(0.4, 0, 0.2, 1);
+  --ease-in: cubic-bezier(0.4, 0, 1, 1);
+  --ease-in-out: cubic-bezier(0.4, 0, 0.2, 1);
 }
 
-html, body {
-  font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
-  background: var(--surface);
-  color: var(--text-primary);
-  -webkit-font-smoothing: antialiased;
+@layer base {
+  html {
+    -webkit-tap-highlight-color: transparent;
+    scroll-behavior: smooth;
+  }
+
+  body {
+    @apply bg-bg-1 text-text-primary antialiased;
+    font-family: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  }
+
+  h1 { @apply text-h1 font-semibold tracking-tight; }
+  h2 { @apply text-h2 font-semibold tracking-tight; }
+  h3 { @apply text-h3 font-semibold tracking-tight; }
 }
+
+@layer components {
+  .focus-ring {
+    @apply focus:outline-none focus:ring-2 focus:ring-accent-primary/20 focus:border-accent-primary transition-all duration-150;
+  }
+
+  .scrollbar-premium::-webkit-scrollbar {
+    width: 6px;
+  }
+  .scrollbar-premium::-webkit-scrollbar-track {
+    @apply bg-transparent;
+  }
+  .scrollbar-premium::-webkit-scrollbar-thumb {
+    @apply bg-bg-3 rounded-full hover:bg-bg-4 transition-colors;
+  }
+}
+
+/* Custom styles for specific requirements */
+.auto-grow-textarea {
+  min-height: 120px;
+  max-height: 400px;
+  resize: vertical;
+}
+
+@keyframes drawCheck {
+  to {
+    stroke-dashoffset: 0;
+  }
+}
+
+.animate-draw-check {
+  stroke-dasharray: 100;
+  stroke-dashoffset: 100;
+  animation: drawCheck 0.4s ease-out forwards;
+}
+
