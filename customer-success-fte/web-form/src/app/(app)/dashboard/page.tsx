@@ -400,7 +400,7 @@ export default function DashboardPage() {
           <div className="flex items-center justify-between mb-6">
             <div>
               <h2 className="text-body-lg font-bold text-text-primary">Ticket Volume</h2>
-              <p className="text-body-sm text-text-tertiary">Today's ticket flow by hour</p>
+              <p className="text-body-sm text-text-tertiary">Today&apos;s ticket flow by hour</p>
             </div>
             <div className="flex items-center gap-4 text-body-sm">
               <span className="flex items-center gap-1.5">
