@@ -1,0 +1,1 @@
+{ "framework": "nextjs", "buildCommand": "cd web-form && npm run build", "outputDirectory": "web-form/.next" }
