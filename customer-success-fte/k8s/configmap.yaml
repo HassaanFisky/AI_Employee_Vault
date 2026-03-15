@@ -1,0 +1,13 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: fte-config
+  namespace: customer-success-fte
+data:
+  KAFKA_BOOTSTRAP_SERVERS: "pkc-oxqxx9.us-east-1.aws.confluent.cloud:9092"
+  KAFKA_SECURITY_PROTOCOL: "SASL_SSL"
+  KAFKA_SASL_MECHANISM: "PLAIN"
+  GROQ_BASE_URL: "https://api.groq.com/openai/v1"
+  GROQ_MODEL: "llama-3.3-70b-versatile"
+  ENVIRONMENT: "production"
+  LOG_LEVEL: "INFO"

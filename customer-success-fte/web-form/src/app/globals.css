@@ -1,0 +1,39 @@
+/* web-form/src/app/globals.css */
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+:root {
+  --primary: #6366f1;
+  --primary-dark: #4f46e5;
+  --primary-light: #818cf8;
+  --surface: #0f0f13;
+  --surface-2: #1a1a24;
+  --surface-3: #252535;
+  --border: rgba(255,255,255,0.08);
+  --text-primary: #f1f1f5;
+  --text-secondary: #9898b0;
+  --text-muted: #5c5c78;
+  --user-bubble: #4f46e5;
+  --agent-bubble: #1e1e2e;
+  --success: #22c55e;
+  --warning: #f59e0b;
+  --error: #ef4444;
+  --radius-sm: 8px;
+  --radius-md: 14px;
+  --radius-lg: 20px;
+  --radius-xl: 24px;
+  --shadow-glow: 0 0 40px rgba(99,102,241,0.15);
+  --transition: 0.2s cubic-bezier(0.4,0,0.2,1);
+}
+
+html, body {
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+  background: var(--surface);
+  color: var(--text-primary);
+  -webkit-font-smoothing: antialiased;
+}

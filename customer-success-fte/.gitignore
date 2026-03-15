@@ -1,0 +1,51 @@
+# .gitignore
+# Python
+__pycache__/
+*.py[cod]
+*.pyo
+.venv/
+venv/
+dist/
+build/
+*.egg-info/
+.pytest_cache/
+.coverage
+htmlcov/
+.mypy_cache/
+.ruff_cache/
+
+# Environment & Secrets
+.env
+.env*
+secrets.yaml
+k8s/secrets.yaml
+secrets/
+*.json
+!web-form/package.json
+!web-form/tsconfig.json
+!credentials.json.example
+
+# Node / Next.js
+node_modules/
+.next/
+web-form/node_modules/
+web-form/.next/
+
+# IDE
+.vscode/
+.idea/
+*.swp
+
+# Docker
+docker-compose.override.yml
+
+# Kafka
+kafka-logs/
+
+# Database
+*.sql.bak
+postgres_data/
+
+# OS
+.DS_Store
+Thumbs.db
