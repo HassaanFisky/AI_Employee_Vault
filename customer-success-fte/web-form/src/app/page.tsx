@@ -1,4 +1,5 @@
 import dynamic from "next/dynamic";
+import Link from "next/link";
 import { SupportForm } from "@/components";
 
 /**
@@ -20,6 +21,16 @@ export default function HomePage() {
       <div className="absolute top-0 left-0 w-full h-[300px] bg-gradient-to-b from-accent-primary/5 to-transparent pointer-events-none" />
       <div className="absolute top-[20%] right-[-5%] w-[400px] h-[400px] bg-accent-primary/10 rounded-full blur-[100px] pointer-events-none" />
       
+      {/* Admin Dashboard Link */}
+      <div className="absolute top-6 right-6 z-50">
+        <Link
+          href="/dashboard"
+          className="flex items-center gap-2 px-4 py-2 rounded-lg bg-bg-2 border border-bg-3 hover:border-accent-primary/50 text-body-sm font-semibold text-text-secondary hover:text-accent-primary transition-all shadow-sm"
+        >
+          Admin Dashboard
+        </Link>
+      </div>
+
       {/* Search Console / Main Interaction Area */}
       <div className="relative z-10 w-full flex flex-col items-center">
         <SupportForm />
