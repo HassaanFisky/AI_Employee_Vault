@@ -37,17 +37,17 @@ const WS_URL = process.env.NEXT_PUBLIC_WS_URL ?? "ws://localhost:8000";
 // ─── Components ───────────────────────────────────────────────────────────────
 
 const TypingIndicator = () => (
-  <div className="flex items-center gap-sm p-sm animate-fade-in">
-    <div className="flex gap-1 items-center">
+  <div className="flex items-center gap-3 p-4 animate-fade-in">
+    <div className="flex gap-1.5 items-center">
       {[0, 1, 2].map((i) => (
         <span
           key={i}
-          className="w-1.5 h-1.5 rounded-full bg-accent-primary animate-bounce"
+          className="w-1.5 h-1.5 rounded-full bg-accent-primary animate-bounce shadow-[0_0_8px_rgba(16,185,129,0.5)]"
           style={{ animationDelay: `${i * 0.2}s` }}
         />
       ))}
     </div>
-    <span className="text-body-sm text-text-tertiary">ARIA is thinking...</span>
+    <span className="text-body-sm text-text-quaternary font-bold uppercase tracking-widest">WHOOSH is thinking...</span>
   </div>
 );
 
@@ -67,26 +67,26 @@ const MessageBubble = ({ message }: { message: ChatMessage }) => {
 
   return (
     <div className={cn(
-      "flex flex-col mb-md animate-slide-up",
+      "flex flex-col mb-6 animate-slide-up",
       isUser ? "items-end" : "items-start"
     )}>
       {!isUser && (
-        <div className="flex items-center gap-sm mb-xs pl-1">
-          <div className="w-5 h-5 rounded-full bg-accent-primary flex items-center justify-center shadow-glow">
-            <Bot size={12} className="text-white" />
+        <div className="flex items-center gap-2 mb-2 pl-1">
+          <div className="w-6 h-6 rounded-lg bg-accent-primary flex items-center justify-center shadow-[0_0_12px_rgba(16,185,129,0.2)]">
+            <Bot size={14} className="text-bg-1" />
           </div>
-          <span className="text-body-sm font-semibold text-text-secondary">ARIA</span>
+          <span className="text-body-sm font-black text-text-secondary uppercase tracking-widest">WHOOSH</span>
         </div>
       )}
       <div className={cn(
-        "max-w-[85%] px-md py-sm rounded-sm text-body-reg leading-relaxed break-words",
+        "max-w-[85%] px-5 py-3.5 rounded-2xl text-body-reg leading-relaxed break-words font-medium shadow-sm transition-all",
         isUser 
-          ? "bg-accent-primary text-white shadow-lg rounded-tr-none" 
-          : "bg-bg-3 text-text-primary border border-bg-4 rounded-tl-none"
+          ? "bg-accent-primary text-bg-1 rounded-tr-none" 
+          : "bg-bg-2 text-text-primary border border-white/5 rounded-tl-none"
       )}>
         {message.content}
       </div>
-      <span className="text-[10px] text-text-tertiary mt-1 px-1">
+      <span className="text-[10px] text-text-quaternary mt-1.5 px-1 font-bold">
         {message.timestamp.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
       </span>
     </div>
@@ -198,23 +198,23 @@ export function SupportWidget() {
     return (
       <button
         onClick={() => setIsOpen(true)}
-        className="fixed bottom-xl right-xl w-14 h-14 rounded-full bg-accent-primary text-white flex items-center justify-center shadow-[0_0_20px_rgba(16,185,129,0.4)] hover:scale-110 active:scale-95 transition-all z-50 group overflow-hidden"
+        className="fixed bottom-xl right-xl w-14 h-14 rounded-full bg-accent-primary text-white flex items-center justify-center shadow-[0_0_24px_rgba(16,185,129,0.3)] hover:shadow-[0_0_32px_rgba(16,185,129,0.5)] hover:bg-accent-hover hover:scale-110 active:scale-95 transition-all duration-300 z-50 group overflow-hidden border border-white/20 backdrop-blur-sm"
         aria-label="Open AI Support"
       >
-        <div className="absolute inset-0 bg-white/20 scale-0 group-hover:scale-100 transition-transform duration-slow rounded-full" />
-        <MessageCircle size={24} className="relative z-10" />
+        <div className="absolute inset-0 bg-gradient-to-tr from-transparent via-white/10 to-white/30 scale-0 group-hover:scale-100 transition-transform duration-slow rounded-full pointer-events-none" />
+        <MessageCircle size={24} className="relative z-10 drop-shadow-md" />
       </button>
     );
   }
 
   return (
     <div className={cn(
-      "fixed bottom-xl right-xl w-full max-w-[400px] border border-bg-3 bg-bg-2 shadow-2xl rounded-sm z-50 flex flex-col transition-all duration-base",
-      isMinimized ? "h-[64px]" : "h-[min(650px,calc(100vh-100px))]",
-      "animate-bounce-in"
+      "fixed bottom-xl right-xl w-full max-w-[400px] border border-white/10 bg-bg-1/80 backdrop-blur-xl shadow-2xl rounded-2xl z-50 flex flex-col transition-all duration-300 overflow-hidden",
+      isMinimized ? "h-[70px]" : "h-[min(650px,calc(100vh-100px))]",
+      "animate-fade-in"
     )}>
       {/* Header */}
-      <div className="p-md flex items-center justify-between border-b border-bg-3 bg-white/[0.02]">
+      <div className="p-4 flex items-center justify-between border-b border-white/5 bg-gradient-to-r from-bg-2 to-bg-1 relative z-10">
         <div className="flex items-center gap-md">
           <div className="relative">
             <div className="w-10 h-10 rounded-full bg-accent-primary flex items-center justify-center shadow-glow">
@@ -226,10 +226,10 @@ export function SupportWidget() {
             )} />
           </div>
           <div>
-            <h4 className="text-body-reg font-bold text-text-primary">ARIA</h4>
-            <div className="flex items-center gap-xs">
-              <span className="text-[10px] text-text-tertiary">AI Response Mode</span>
-              {status === 'connected' && <Badge variant="success" className="h-3 py-0 px-1 text-[8px]">ACTIVE</Badge>}
+            <h4 className="text-body-reg font-black text-text-primary tracking-tight">WHOOSH</h4>
+            <div className="flex items-center gap-1.5">
+              <span className="text-[10px] text-text-quaternary font-bold uppercase tracking-widest">Autonomous Agent</span>
+              {status === 'connected' && <Badge variant="success" className="h-3 py-0 px-2 text-[8px] font-black tracking-widest leading-none">LIVE</Badge>}
             </div>
           </div>
         </div>
@@ -267,8 +267,8 @@ export function SupportWidget() {
                 value={inputText}
                 onChange={(e) => setInputText(e.target.value)}
                 onKeyDown={handleKeyDown}
-                placeholder="Ask ARIA a question..."
-                className="flex-1 bg-bg-3 border border-bg-4 rounded-sm px-md py-sm text-body-reg text-text-primary placeholder:text-text-tertiary focus:border-accent-primary outline-none transition-colors resize-none scrollbar-premium h-[42px] max-h-[120px]"
+                placeholder="How can WHOOSH assist?"
+                className="flex-1 bg-bg-2 border border-white/5 rounded-xl px-5 py-3 text-body-reg text-text-primary placeholder:text-text-quaternary focus:border-accent-primary/50 outline-none transition-all shadow-inner h-[46px] max-h-[120px] font-medium"
                 onInput={(e) => {
                   const el = e.currentTarget;
                   el.style.height = "auto";
@@ -284,11 +284,11 @@ export function SupportWidget() {
                 <Send size={18} />
               </Button>
             </div>
-            <div className="mt-sm flex items-center justify-between text-[10px] text-text-tertiary">
-              <p>⌘+Enter to send</p>
-              <p className="flex items-center gap-xs">
-                {status === 'connected' ? <CheckCircle2 size={10} className="text-success" /> : <AlertCircle size={10} className="text-error" />}
-                System Status: {status}
+            <div className="mt-4 flex items-center justify-between text-[10px] text-text-quaternary font-bold uppercase tracking-widest">
+              <p>Enter to send</p>
+              <p className="flex items-center gap-1.5">
+                {status === 'connected' ? <CheckCircle2 size={10} className="text-success shadow-[0_0_8px_rgba(52,211,153,0.3)]" /> : <AlertCircle size={10} className="text-error" />}
+                {status}
               </p>
             </div>
           </div>

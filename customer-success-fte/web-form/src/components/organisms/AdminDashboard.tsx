@@ -138,51 +138,55 @@ export const AdminDashboard: React.FC = () => {
 
   if (loading) {
     return (
-      <div className="flex items-center justify-center h-screen bg-bg-1">
-        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-accent-primary" />
+      <div className="flex flex-col items-center justify-center h-screen bg-bg-1 gap-6">
+        <div className="relative w-16 h-16">
+          <div className="absolute inset-0 rounded-xl border-2 border-white/5 animate-pulse" />
+          <div className="absolute inset-0 rounded-xl border-t-2 border-accent-primary animate-spin" />
+        </div>
+        <p className="text-body-sm text-text-quaternary font-bold uppercase tracking-[0.3em] animate-pulse">Syncing Vitals...</p>
       </div>
     );
   }
 
   return (
-    <div className="min-h-screen bg-bg-1 p-lg md:p-2xl animate-fade-in">
+    <div className="min-h-screen bg-bg-1 p-10 md:p-14 animate-fade-in space-y-12">
       {/* Header */}
-      <div className="flex flex-col md:flex-row md:items-center justify-between gap-md mb-3xl">
-        <div className="space-y-xs">
-          <h1 className="text-h1 text-text-primary">Support Dashboard</h1>
-          <p className="text-body-reg text-text-secondary">Real-time metrics and ticket management</p>
+      <div className="flex flex-col md:flex-row md:items-end justify-between gap-8 border-b border-white/5 pb-10">
+        <div className="space-y-3">
+          <h1 className="text-h1 tracking-tighter bg-gradient-to-r from-text-primary to-text-secondary bg-clip-text text-transparent">Operations Pulse</h1>
+          <p className="text-body-reg text-text-tertiary tracking-wide font-medium">Real-time telemetry and interaction management</p>
         </div>
-        <div className="flex items-center gap-md">
-          <p className="text-body-sm text-text-tertiary hidden md:block">
-            Last updated: Just now
+        <div className="flex items-center gap-6">
+          <p className="text-body-sm text-text-quaternary font-bold uppercase tracking-widest hidden md:block">
+            Last Index: Just now
           </p>
-          <Button variant="danger" size="sm" onClick={() => console.log('Logout')}>
-            <LogOut size={16} className="mr-sm" /> Logout
+          <Button variant="danger" size="sm" className="px-6 py-2.5 rounded-xl text-body-sm font-black uppercase tracking-widest transition-all hover:scale-105 active:scale-95" onClick={() => console.log('Logout')}>
+            <LogOut size={16} className="mr-2" /> Terminate
           </Button>
         </div>
       </div>
 
       {/* Metrics Grid */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-lg mb-3xl">
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
         {metrics.map((metric, idx) => (
           <Card 
             key={metric.title} 
-            className="group animate-slide-up"
+            className="group animate-slide-up relative overflow-hidden bg-bg-2 border-white/5 hover:border-white/10 transition-all p-8 rounded-2xl"
             style={{ animationDelay: `${idx * 100}ms` }}
           >
-            <div className="flex justify-between items-start mb-md">
-              <span className="text-body-sm font-medium text-text-tertiary">{metric.title}</span>
-              <div className="p-sm rounded-sm bg-accent-primary/10 text-accent-primary group-hover:scale-110 transition-transform">
+            <div className="flex justify-between items-start mb-6">
+              <span className="text-body-sm font-black text-text-quaternary uppercase tracking-widest">{metric.title}</span>
+              <div className="p-3 rounded-xl bg-accent-primary/5 text-accent-primary group-hover:bg-accent-primary group-hover:text-bg-1 transition-all shadow-sm">
                 <metric.icon size={20} />
               </div>
             </div>
             <div className="flex items-end justify-between">
-              <h2 className="text-h2 text-text-primary font-semibold">{metric.value}</h2>
+              <h2 className="text-h1 text-text-primary font-black tabular-nums tracking-tighter">{metric.value}</h2>
               <div className={cn(
-                "flex items-center text-body-sm font-medium",
-                metric.change > 0 ? "text-success" : "text-error"
+                "flex items-center text-body-sm font-black tabular-nums tracking-widest mb-1 px-2 py-0.5 rounded-full",
+                metric.change > 0 ? "text-success bg-success/10" : "text-error bg-error/10"
               )}>
-                {metric.change > 0 ? <ArrowUpRight size={14} className="mr-xs" /> : <ArrowDownRight size={14} className="mr-xs" />}
+                {metric.change > 0 ? <ArrowUpRight size={14} className="mr-1" /> : <ArrowDownRight size={14} className="mr-1" />}
                 {Math.abs(metric.change)}%
               </div>
             </div>

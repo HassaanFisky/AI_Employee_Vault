@@ -196,15 +196,15 @@ function CategoryPill({
       <button
         onClick={onClick}
         className={cn(
-          "flex items-center gap-2 px-4 py-2 rounded-xl text-body-sm font-semibold transition-all",
+          "flex items-center gap-3 px-5 py-2.5 rounded-xl text-body-sm font-bold uppercase tracking-widest transition-all",
           active
-            ? "bg-accent-primary text-white shadow-sm"
-            : "bg-bg-2 border border-bg-3 text-text-secondary hover:border-accent-primary/40 hover:text-text-primary"
+            ? "bg-accent-primary text-bg-1 shadow-lg shadow-accent-primary/20"
+            : "bg-bg-2 border border-white/5 text-text-quaternary hover:border-accent-primary/50 hover:text-text-secondary"
         )}
       >
         <FileText size={14} />
         All Articles
-        <span className={cn("text-[10px] px-1.5 py-0.5 rounded-full", active ? "bg-white/20" : "bg-bg-3")}>
+        <span className={cn("text-[10px] px-2 py-0.5 rounded-full font-bold ml-1", active ? "bg-bg-1/20 text-bg-1" : "bg-white/5 text-text-tertiary")}>
           {count}
         </span>
       </button>
@@ -217,15 +217,15 @@ function CategoryPill({
     <button
       onClick={onClick}
       className={cn(
-        "flex items-center gap-2 px-4 py-2 rounded-xl text-body-sm font-semibold transition-all",
+        "flex items-center gap-3 px-5 py-2.5 rounded-xl text-body-sm font-bold uppercase tracking-widest transition-all",
         active
-          ? cn(cfg.bg, cfg.color, "border", cfg.border)
-          : "bg-bg-2 border border-bg-3 text-text-secondary hover:border-accent-primary/40 hover:text-text-primary"
+          ? cn(cfg.bg, cfg.color, "border", cfg.border, "shadow-lg shadow-current/5")
+          : "bg-bg-2 border border-white/5 text-text-quaternary hover:border-accent-primary/50 hover:text-text-secondary"
       )}
     >
       <Icon size={14} />
       {cfg.label}
-      <span className={cn("text-[10px] px-1.5 py-0.5 rounded-full", active ? cfg.bg : "bg-bg-3")}>
+      <span className={cn("text-[10px] px-2 py-0.5 rounded-full font-bold ml-1", active ? "bg-current/20" : "bg-white/5 text-text-tertiary")}>
         {count}
       </span>
     </button>
@@ -236,12 +236,14 @@ function ArticleCard({ article }: { article: KBArticle }) {
   const cfg = CATEGORY_CONFIG[article.category];
   const Icon = cfg.icon;
   return (
-    <div className="group rounded-xl bg-bg-2 border border-bg-3 hover:border-accent-primary/30 p-5 transition-all duration-200 cursor-pointer hover:shadow-md flex flex-col gap-3">
+    <div className="group rounded-2xl bg-bg-2 border border-white/5 hover:border-white/10 p-6 transition-all duration-300 cursor-pointer hover:shadow-xl hover:shadow-accent-primary/5 flex flex-col gap-4 relative overflow-hidden animate-slide-up">
+      <div className="absolute top-0 right-0 w-24 h-24 bg-gradient-to-br from-white/[0.02] to-transparent pointer-events-none rounded-bl-full" />
+      
       {/* Category + Read time */}
-      <div className="flex items-center justify-between">
+      <div className="flex items-center justify-between mb-2">
         <span
           className={cn(
-            "flex items-center gap-1.5 px-2.5 py-1 rounded-full text-[11px] font-semibold border",
+            "flex items-center gap-1.5 px-3 py-1 rounded-full text-[9px] font-black uppercase tracking-widest border",
             cfg.bg,
             cfg.color,
             cfg.border
@@ -249,33 +251,33 @@ function ArticleCard({ article }: { article: KBArticle }) {
         >
           <Icon size={10} /> {cfg.label}
         </span>
-        <span className="flex items-center gap-1 text-[11px] text-text-tertiary">
-          <Clock size={10} />
-          {article.read_time} read
+        <span className="flex items-center gap-1.5 text-[10px] text-text-quaternary font-bold uppercase tracking-tighter">
+          <Clock size={10} className="text-accent-primary/50" />
+          {article.read_time}
         </span>
       </div>
 
       {/* Title */}
-      <h3 className="text-body-reg font-bold text-text-primary group-hover:text-accent-primary transition-colors leading-snug">
+      <h3 className="text-h3 text-text-primary group-hover:text-accent-primary transition-colors leading-tight font-bold">
         {article.title}
       </h3>
 
       {/* Summary */}
-      <p className="text-body-sm text-text-secondary leading-relaxed line-clamp-2">
+      <p className="text-body-reg text-text-secondary leading-relaxed line-clamp-2 font-medium">
         {article.summary}
       </p>
 
       {/* Footer */}
-      <div className="flex items-center justify-between pt-2 border-t border-bg-3 mt-auto">
-        <div className="flex items-center gap-3 text-[11px] text-text-tertiary">
-          <span className="flex items-center gap-1">
-            <Star size={10} className="text-yellow-400" />
-            {article.helpful}% helpful
+      <div className="flex items-center justify-between pt-6 border-t border-white/5 mt-auto">
+        <div className="flex items-center gap-4 text-[10px] text-text-quaternary font-bold uppercase tracking-widest">
+          <span className="flex items-center gap-1.5">
+            <Star size={10} className="text-warning fill-warning" />
+            {article.helpful}%
           </span>
-          <span>{article.views.toLocaleString()} views</span>
+          <span>{article.views.toLocaleString()} VIEWS</span>
         </div>
-        <span className="flex items-center gap-1 text-accent-primary text-body-sm font-semibold group-hover:gap-2 transition-all">
-          Read <ExternalLink size={12} />
+        <span className="flex items-center gap-2 text-accent-primary text-body-reg font-black uppercase tracking-widest group-hover:gap-3 transition-all">
+          Read <ChevronRight size={14} />
         </span>
       </div>
     </div>
@@ -329,39 +331,43 @@ export default function KnowledgePage() {
   };
 
   return (
-    <div className="p-6 md:p-8 max-w-[1400px] mx-auto space-y-6">
+    <div className="p-6 md:p-10 max-w-[1400px] mx-auto space-y-10 animate-fade-in">
       {/* Header */}
-      <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
+      <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 border-b border-white/5 pb-8">
         <div>
-          <h1 className="text-h1 font-bold text-text-primary">Knowledge Base</h1>
-          <p className="text-body-reg text-text-secondary mt-1">
-            {articles.length} articles · AI-powered semantic search
+          <h1 className="text-h1 tracking-tighter bg-gradient-to-r from-text-primary to-text-secondary bg-clip-text text-transparent">
+            Knowledge
+          </h1>
+          <p className="text-body-reg text-text-tertiary mt-2 tracking-wide font-medium">
+            {articles.length} verified documents · AI Semantic Search Enabled
           </p>
         </div>
-        <button
-          onClick={fetchArticles}
-          disabled={loading}
-          className="flex items-center gap-2 px-4 py-2 rounded-lg bg-bg-2 border border-bg-3 hover:border-accent-primary/40 text-body-sm text-text-secondary hover:text-text-primary transition-all disabled:opacity-50"
-        >
-          <RefreshCw size={14} className={loading ? "animate-spin" : ""} />
-          {loading ? "Loading..." : "Sync Articles"}
-        </button>
+        <div className="flex items-center gap-4">
+          <button
+            onClick={fetchArticles}
+            disabled={loading}
+            className="flex items-center gap-2 px-4 py-2.5 rounded-xl bg-white/5 border border-white/5 hover:border-accent-primary/40 hover:bg-white/[0.08] text-body-sm font-semibold text-text-secondary hover:text-text-primary transition-all disabled:opacity-50 shadow-sm"
+          >
+            <RefreshCw size={14} className={loading ? "animate-spin" : "text-text-quaternary"} />
+            {loading ? "Syncing..." : "Refresh Index"}
+          </button>
+        </div>
       </div>
 
       {/* Search */}
-      <div className="relative max-w-2xl">
-        <Search size={18} className="absolute left-4 top-1/2 -translate-y-1/2 text-text-tertiary" />
+      <div className="relative max-w-2xl group">
+        <Search size={18} className="absolute left-5 top-1/2 -translate-y-1/2 text-text-quaternary group-focus-within:text-accent-primary transition-colors" />
         <input
           type="text"
-          placeholder="Search articles by title, keyword, or topic..."
+          placeholder="Describe what you need to find..."
           value={search}
           onChange={(e) => setSearch(e.target.value)}
-          className="w-full pl-12 pr-4 py-3 bg-bg-2 border border-bg-3 rounded-xl text-body-reg text-text-primary placeholder:text-text-tertiary focus:outline-none focus:border-accent-primary/60 transition-colors shadow-sm"
+          className="w-full pl-14 pr-16 py-4 bg-bg-2 border border-white/5 rounded-2xl text-body-reg text-text-primary placeholder:text-text-quaternary focus:outline-none focus:border-accent-primary/50 focus:bg-white/[0.02] transition-all shadow-xl shadow-black/20"
         />
         {search && (
           <button
             onClick={() => setSearch("")}
-            className="absolute right-4 top-1/2 -translate-y-1/2 text-text-tertiary hover:text-text-primary transition-colors text-[11px]"
+            className="absolute right-5 top-1/2 -translate-y-1/2 text-text-quaternary hover:text-text-primary font-bold text-[10px] uppercase tracking-widest transition-colors"
           >
             Clear
           </button>
@@ -369,7 +375,7 @@ export default function KnowledgePage() {
       </div>
 
       {/* Category Pills */}
-      <div className="flex flex-wrap gap-2">
+      <div className="flex flex-wrap gap-4">
         <CategoryPill
           category="all"
           active={activeCategory === "all"}
@@ -387,60 +393,54 @@ export default function KnowledgePage() {
         ))}
       </div>
 
-      {/* Results count */}
-      <div className="flex items-center justify-between">
-        <p className="text-body-sm text-text-tertiary">
-          {filtered.length === 0
-            ? "No articles found"
-            : `${filtered.length} article${filtered.length !== 1 ? "s" : ""} found`}
-          {search && <span className="text-text-secondary"> for &ldquo;{search}&rdquo;</span>}
-        </p>
-        <div className="flex items-center gap-2 text-[11px] text-text-tertiary">
-          <AlertTriangle size={11} className="text-warning" />
-          Demo data — connect backend for live KB sync
-        </div>
-      </div>
-
       {/* Articles Grid */}
       {loading ? (
-        <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4">
+        <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
           {Array.from({ length: 6 }).map((_, i) => (
             <div
               key={i}
-              className="rounded-xl bg-bg-2 border border-bg-3 p-5 h-[200px] animate-pulse"
+              className="rounded-2xl bg-white/[0.02] border border-white/5 h-[240px] animate-shimmer"
             />
           ))}
         </div>
       ) : filtered.length > 0 ? (
-        <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4">
+        <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
           {filtered.map((article) => (
             <ArticleCard key={article.id} article={article} />
           ))}
         </div>
       ) : (
-        <div className="flex flex-col items-center justify-center py-20 gap-4">
-          <BookOpen size={48} className="text-text-tertiary opacity-30" />
-          <p className="text-body-reg text-text-tertiary">No articles match your search</p>
+        <div className="flex flex-col items-center justify-center py-32 gap-6 bg-white/[0.01] rounded-3xl border border-dashed border-white/5">
+          <div className="w-16 h-16 rounded-full bg-bg-4 flex items-center justify-center">
+            <BookOpen size={32} className="text-text-quaternary" />
+          </div>
+          <div className="text-center group">
+            <p className="text-body-reg font-bold text-text-tertiary uppercase tracking-[0.2em]">Index Mismatch</p>
+            <p className="text-body-sm text-text-quaternary mt-2">Zero articles match your current semantic filter.</p>
+          </div>
           <button
             onClick={() => { setSearch(""); setActiveCategory("all"); }}
-            className="text-body-sm text-accent-primary hover:underline"
+            className="text-body-reg font-black text-accent-primary hover:text-accent-primary/80 uppercase tracking-widest pt-2 transition-all"
           >
-            Clear filters
+            Reset Intelligence
           </button>
         </div>
       )}
 
-      {/* Stats footer */}
-      <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 pt-4 border-t border-bg-3">
+      {/* Stats footer (Internal View) */}
+      <h2 className="text-h2 uppercase text-text-quaternary font-bold tracking-[0.2em] pt-10 border-t border-white/5">System Clusters</h2>
+      <div className="grid grid-cols-2 sm:grid-cols-4 gap-6">
         {(["account", "billing", "technical", "general"] as Category[]).map((cat) => {
           const cfg = CATEGORY_CONFIG[cat];
           const Icon = cfg.icon;
           return (
-            <div key={cat} className={cn("rounded-xl p-4 border flex items-center gap-3", cfg.bg, cfg.border)}>
-              <Icon size={20} className={cfg.color} />
+            <div key={cat} className={cn("rounded-2xl p-6 border flex items-center gap-5 transition-all hover:scale-[1.02]", cfg.bg, cfg.border)}>
+              <div className="w-12 h-12 rounded-xl flex items-center justify-center bg-white/10">
+                <Icon size={24} className={cfg.color} />
+              </div>
               <div>
-                <p className="text-h3 font-bold text-text-primary">{counts[cat]}</p>
-                <p className="text-[11px] text-text-tertiary">{cfg.label}</p>
+                <p className="text-h3 font-black text-text-primary tabular-nums tracking-tighter">{counts[cat]}</p>
+                <p className="text-body-sm font-bold text-text-quaternary uppercase tracking-widest mt-0.5">{cfg.label}</p>
               </div>
             </div>
           );

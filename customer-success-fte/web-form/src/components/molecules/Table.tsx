@@ -8,6 +8,7 @@ export interface Column<T> {
   header: string;
   accessor: keyof T | ((item: T) => React.ReactNode);
   sortable?: boolean;
+  className?: string;
 }
 
 interface TableProps<T> {
@@ -18,10 +19,12 @@ interface TableProps<T> {
   onSort?: (key: keyof T | string) => void;
   className?: string;
   emptyMessage?: string;
+  renderExpandedRow?: (item: T) => React.ReactNode;
+  expandedRowId?: string | number | null;
 }
 
 /**
- * Premium Responsive Table component with sorting and clickable rows
+ * Premium Responsive Table component with sorting, clickable rows, and expansion
  */
 export const Table = <T extends { id: string | number }>({
   columns,
@@ -30,20 +33,23 @@ export const Table = <T extends { id: string | number }>({
   sortConfig,
   onSort,
   className,
-  emptyMessage = 'No data found'
+  emptyMessage = 'No data found',
+  renderExpandedRow,
+  expandedRowId
 }: TableProps<T>) => {
   return (
-    <div className={cn('w-full bg-bg-2 border border-bg-3 rounded-sm shadow-md overflow-hidden', className)}>
+    <div className={cn('w-full bg-bg-2 border border-white/5 rounded-2xl shadow-xl overflow-hidden backdrop-blur-md', className)}>
       <div className="overflow-x-auto scrollbar-premium">
-        <table className="w-full text-left border-collapse min-w-[800px]">
+        <table className="w-full text-left border-collapse min-w-[900px]">
           <thead>
-            <tr className="bg-bg-3 border-b border-bg-3">
+            <tr className="bg-white/[0.02] border-b border-white/5">
               {columns.map((column, i) => (
                 <th 
                   key={i} 
                   className={cn(
-                    "px-md py-md text-body-sm font-semibold text-text-secondary uppercase tracking-wider transition-colors select-none",
-                    column.sortable && "cursor-pointer hover:text-text-primary"
+                    "px-10 py-5 text-h2 uppercase text-text-quaternary font-bold tracking-[0.1em] transition-colors select-none",
+                    column.sortable && "cursor-pointer hover:text-text-primary",
+                    column.className
                   )}
                   onClick={() => column.sortable && onSort?.(typeof column.accessor === 'string' ? column.accessor : column.header)}
                 >
@@ -52,9 +58,9 @@ export const Table = <T extends { id: string | number }>({
                     {column.sortable && (
                       <div className="text-text-tertiary">
                         {sortConfig?.key === (typeof column.accessor === 'string' ? column.accessor : column.header) ? (
-                          sortConfig.direction === 'asc' ? <ChevronUp size={14} /> : <ChevronDown size={14} />
+                          sortConfig.direction === 'asc' ? <ChevronUp size={14} className="text-accent-primary" /> : <ChevronDown size={14} className="text-accent-primary" />
                         ) : (
-                          <ArrowUpDown size={14} opacity={0.5} />
+                          <ArrowUpDown size={14} opacity={0.3} />
                         )}
                       </div>
                     )}
@@ -63,30 +69,41 @@ export const Table = <T extends { id: string | number }>({
               ))}
             </tr>
           </thead>
-          <tbody className="divide-y divide-bg-3">
+          <tbody className="divide-y divide-white/5">
             {data.length > 0 ? (
-              data.map((item, i) => (
-                <tr 
-                  key={item.id} 
-                  onClick={() => onRowClick?.(item)}
-                  className={cn(
-                    "transition-all duration-fast group h-[64px]",
-                    i % 2 === 1 ? "bg-bg-1/20" : "bg-bg-2",
-                    onRowClick && "cursor-pointer hover:bg-bg-3"
-                  )}
-                >
-                  {columns.map((column, j) => (
-                    <td key={j} className="px-md py-sm text-body-reg text-text-primary">
-                      {typeof column.accessor === 'function' 
-                        ? column.accessor(item) 
-                        : (item[column.accessor] as React.ReactNode)}
-                    </td>
-                  ))}
-                </tr>
-              ))
+              data.map((item, i) => {
+                const isExpanded = expandedRowId === item.id;
+                return (
+                  <React.Fragment key={item.id}>
+                    <tr 
+                      onClick={() => onRowClick?.(item)}
+                      className={cn(
+                        "transition-all duration-base group",
+                        onRowClick && "cursor-pointer hover:bg-white/[0.04]",
+                        isExpanded && "bg-white/[0.03]"
+                      )}
+                    >
+                      {columns.map((column, j) => (
+                        <td key={j} className={cn("px-10 py-6 text-body-reg font-medium text-text-secondary group-hover:text-text-primary transition-colors", column.className)}>
+                          {typeof column.accessor === 'function' 
+                            ? column.accessor(item) 
+                            : (item[column.accessor] as React.ReactNode)}
+                        </td>
+                      ))}
+                    </tr>
+                    {isExpanded && renderExpandedRow && (
+                      <tr className="animate-fade-in">
+                        <td colSpan={columns.length} className="p-0">
+                          {renderExpandedRow(item)}
+                        </td>
+                      </tr>
+                    )}
+                  </React.Fragment>
+                );
+              })
             ) : (
               <tr>
-                <td colSpan={columns.length} className="px-md py-3xl text-center text-text-tertiary text-body-lg">
+                <td colSpan={columns.length} className="px-10 py-32 text-center text-text-tertiary text-body-lg uppercase font-bold tracking-widest opacity-50">
                   {emptyMessage}
                 </td>
               </tr>

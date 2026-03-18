@@ -24,6 +24,7 @@ secrets/
 !web-form/package.json
 !web-form/tsconfig.json
 !credentials.json.example
+!secrets/gmail_credentials.json.example
 
 # Node / Next.js
 node_modules/
