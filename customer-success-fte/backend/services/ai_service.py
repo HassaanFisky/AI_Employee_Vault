@@ -32,7 +32,24 @@ Constraints:
 - Professional, yet autonomous and futuristic tone.
 """
 
-        # 1. Try OpenRouter (Primary)
+        # 1. Try GROQ (Primary for now as per user request)
+        if self.groq_key and "none" not in self.groq_key.lower() and "your_groq" not in self.groq_key:
+            try:
+                from groq import Groq
+                client = Groq(api_key=self.groq_key)
+                response = client.chat.completions.create(
+                    model=self.groq_model,
+                    messages=[
+                        {"role": "system", "content": "You are a professional Customer Success agent for WHOOSH AI Operations."},
+                        {"role": "user", "content": prompt}
+                    ],
+                    max_tokens=300
+                )
+                return response.choices[0].message.content.strip()
+            except Exception as e:
+                logger.error(f"GROQ error: {str(e)}")
+
+        # 2. Try OpenRouter (Secondary)
         if self.openrouter_key and "none" not in self.openrouter_key.lower():
             try:
                 headers = {
@@ -51,7 +68,7 @@ Constraints:
                     "max_tokens": 500
                 }
                 
-                async with httpx.AsyncClient(timeout=30.0) as client:
+                async with httpx.AsyncClient(timeout=15.0) as client:
                     response = await client.post(
                         "https://openrouter.ai/api/v1/chat/completions",
                         headers=headers,
@@ -65,24 +82,6 @@ Constraints:
                         logger.error(f"OpenRouter Error {response.status_code}: {response.text}")
             except Exception as e:
                 logger.error(f"OpenRouter exception: {str(e)}")
-
-        # 2. Fallback to GROQ if available
-        if self.groq_key and "none" not in self.groq_key.lower() and "your_groq" not in self.groq_key:
-            try:
-                from groq import Groq
-                client = Groq(api_key=self.groq_key)
-                # Synchronous client needs a wrapper for async or we use a separate httpx call
-                response = client.chat.completions.create(
-                    model=self.groq_model,
-                    messages=[
-                        {"role": "system", "content": "You are a professional Customer Success agent for WHOOSH AI Operations."},
-                        {"role": "user", "content": prompt}
-                    ],
-                    max_tokens=300
-                )
-                return response.choices[0].message.content.strip()
-            except Exception as e:
-                logger.error(f"GROQ fallback error: {str(e)}")
 
         # 3. Final safety fallback
         return "Thank you for contacting WHOOSH. Our autonomous systems are processing your telemetry. A human agent will override if necessary. How else can I help?"
