@@ -14,6 +14,10 @@ class Settings(BaseSettings):
     groq_api_key: str
     groq_model: str = "mixtral-8x7b-32768"
     
+    # OpenRouter
+    openrouter_api_key: str
+    openrouter_model: str = "anthropic/claude-3.5-sonnet"
+    
     # Twilio
     twilio_account_sid: str
     twilio_auth_token: str

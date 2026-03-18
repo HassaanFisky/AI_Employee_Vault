@@ -8,11 +8,11 @@ from models.customer import Customer
 from models.ticket import Ticket
 from models.conversation import Conversation
 from models.message import Message
-from services.groq_service import GROQService
+from services.ai_service import AIService
 from sqlalchemy import select
 
 router = APIRouter(prefix="/support", tags=["support"])
-groq_service = GROQService()
+ai_service = AIService()
 
 class SupportFormSubmission(BaseModel):
     name: str
@@ -46,7 +46,7 @@ class SupportFormSubmission(BaseModel):
 
 @router.post("/submit")
 async def submit_support_form(submission: SupportFormSubmission, db: AsyncSession = Depends(get_db)):
-    """Web form submission endpoint."""
+    """Web form submission endpoint with AI triage via OpenRouter/GROQ."""
     try:
         # 1. Customer Management
         result = await db.execute(select(Customer).where(Customer.email == submission.email))
@@ -91,8 +91,8 @@ async def submit_support_form(submission: SupportFormSubmission, db: AsyncSessio
         db.add(ticket)
         await db.flush()
         
-        # 5. AI Response Generation
-        ai_response_text = await groq_service.generate_response(
+        # 5. AI Response Generation (Unified AI Service)
+        ai_response_text = await ai_service.generate_response(
             submission.message, 
             {"channel": "web_form", "category": submission.category}
         )
@@ -113,7 +113,7 @@ async def submit_support_form(submission: SupportFormSubmission, db: AsyncSessio
             'ticket_id': str(ticket.id),
             'conversation_id': str(conversation.id),
             'ai_response': ai_response_text,
-            'message': 'Thank you! Our AI support team has analyzed your request.',
+            'message': 'Thank you! Our WHOOSH AI support team has analyzed your request.',
             'estimated_response_time': 'Usually within 5 minutes'
         }
     except Exception as e:
