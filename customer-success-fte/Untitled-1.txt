@@ -1,0 +1,44 @@
+# ARIA | Customer Success Engine
+
+ARIA
+Command Center
+Navigation
+[Dashboard](https://web-form-ashy.vercel.app/dashboard)
+[Tickets12](https://web-form-ashy.vercel.app/tickets)
+[Live Chat](https://web-form-ashy.vercel.app/)
+[Knowledge Base](https://web-form-ashy.vercel.app/knowledge)
+TechCorp FTE · v2.0.0
+
+# Mission Control
+Real-time AI customer success operations
+
+## Ticket Volume
+Today's ticket flow by hour
+
+## System Health
+Live service status
+
+## Activity Feed
+New ticket from john@acme.com — Billing issue
+TKT-2038 resolved — Password reset (Web)
+TKT-2037 escalated — Legal dispute (Email)
+AI reply sent to +923001234567 — WhatsApp
+New ticket from dev@startup.io — API error 503
+TKT-2035 resolved — Onboarding question
+New ticket from marketing@corp.com — Feature request
+AI reply sent to sarah@fintech.com (Technical)
+
+## AI Thought Terminal
+Initializing agent...
+Groq · llama-3.3-70b-versatile · Real-time tool loop
+
+## Channel Performance (24h)
+Email (Gmail)
+28
+Avg: 11m 40s
+WhatsApp (Twilio)
+19
+Avg: 6m 12s
+Web Support
+34
+Avg: 3m 55s

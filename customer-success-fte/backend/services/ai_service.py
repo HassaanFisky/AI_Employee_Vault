@@ -15,8 +15,7 @@ class AIService:
 
     async def generate_response(self, customer_message: str, context: dict) -> str:
         """
-        Attempt OpenRouter first (with Claude-3.5-Sonnet by default), 
-        then fall back to local GROQ Mixtral if needed.
+        Attempt OpenRouter first (Primary), then fall back to GROQ if needed.
         """
         
         prompt = f"""You are a professional Customer Success agent for WHOOSH AI.
@@ -32,25 +31,8 @@ Constraints:
 - Professional, yet autonomous and futuristic tone.
 """
 
-        # 1. Try GROQ (Primary for now as per user request)
-        if self.groq_key and "none" not in self.groq_key.lower() and "your_groq" not in self.groq_key:
-            try:
-                from groq import Groq
-                client = Groq(api_key=self.groq_key)
-                response = client.chat.completions.create(
-                    model=self.groq_model,
-                    messages=[
-                        {"role": "system", "content": "You are a professional Customer Success agent for WHOOSH AI Operations."},
-                        {"role": "user", "content": prompt}
-                    ],
-                    max_tokens=300
-                )
-                return response.choices[0].message.content.strip()
-            except Exception as e:
-                logger.error(f"GROQ error: {str(e)}")
-
-        # 2. Try OpenRouter (Secondary)
-        if self.openrouter_key and "none" not in self.openrouter_key.lower():
+        # 1. Try OpenRouter (Primary)
+        if self.openrouter_key and "none" not in self.openrouter_key.lower() and "your_openrouter" not in self.openrouter_key:
             try:
                 headers = {
                     "Authorization": f"Bearer {self.openrouter_key}",
@@ -82,6 +64,23 @@ Constraints:
                         logger.error(f"OpenRouter Error {response.status_code}: {response.text}")
             except Exception as e:
                 logger.error(f"OpenRouter exception: {str(e)}")
+
+        # 2. Try GROQ (Fallback)
+        if self.groq_key and "none" not in self.groq_key.lower() and "your_groq" not in self.groq_key:
+            try:
+                from groq import Groq
+                client = Groq(api_key=self.groq_key)
+                response = client.chat.completions.create(
+                    model=self.groq_model,
+                    messages=[
+                        {"role": "system", "content": "You are a professional Customer Success agent for WHOOSH AI Operations."},
+                        {"role": "user", "content": prompt}
+                    ],
+                    max_tokens=300
+                )
+                return response.choices[0].message.content.strip()
+            except Exception as e:
+                logger.error(f"GROQ error: {str(e)}")
 
         # 3. Final safety fallback
         return "Thank you for contacting WHOOSH. Our autonomous systems are processing your telemetry. A human agent will override if necessary. How else can I help?"

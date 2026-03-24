@@ -5,10 +5,15 @@ import os
 import sys
 from dotenv import load_dotenv
 
-# Ensure the current directory is in the path for module imports
-sys.path.append(os.path.dirname(os.path.abspath(__file__)))
+# Ensure the project root and current directory are in the path for module imports
+project_root = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+backend_dir = os.path.dirname(os.path.abspath(__file__))
+if project_root not in sys.path:
+    sys.path.append(project_root)
+if backend_dir not in sys.path:
+    sys.path.append(backend_dir)
 
-load_dotenv()
+load_dotenv(os.path.join(project_root, ".env"))
 
 from routes.tickets import router as tickets_router
 from routes.webhooks import router as webhooks_router
