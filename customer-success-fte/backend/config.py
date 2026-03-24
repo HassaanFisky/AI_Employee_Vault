@@ -12,7 +12,11 @@ class Settings(BaseSettings):
     
     # GROQ
     groq_api_key: str
-    groq_model: str = "mixtral-8x7b-32768"
+    groq_model: str = "llama-3.3-70b-versatile"
+    
+    # OpenRouter
+    openrouter_api_key: str
+    openrouter_model: str = "meta-llama/llama-3.1-8b-instruct:free"
     
     # Twilio
     twilio_account_sid: str

@@ -39,8 +39,8 @@ class GmailHandler:
             return self._service
 
         creds: Optional[Credentials] = None
-        token_path = Path(settings.gmail_token_json)
-        creds_path = Path(settings.gmail_credentials_json)
+        token_path = Path(settings.gmail_token_path)
+        creds_path = Path(settings.gmail_credentials_path)
 
         if token_path.exists():
             creds = Credentials.from_authorized_user_file(str(token_path), self.SCOPES)

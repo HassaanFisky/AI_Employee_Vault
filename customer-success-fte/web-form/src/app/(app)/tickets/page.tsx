@@ -2,24 +2,29 @@
 
 import React, { useState, useEffect, useCallback } from "react";
 import Link from "next/link";
-import { cn } from "@/lib/utils";
-import { Badge } from "@/components/atoms/Badge";
-import {
-  Search,
-  Filter,
-  Mail,
-  Phone,
-  Globe,
-  ChevronDown,
-  ChevronUp,
-  RefreshCw,
-  Ticket,
-  AlertTriangle,
-  ExternalLink,
-  Clock,
+import { 
+  Search, 
+  Filter, 
+  Mail, 
+  Phone, 
+  Globe, 
+  RefreshCw, 
+  Ticket, 
+  AlertTriangle, 
+  ExternalLink, 
+  Clock, 
   User,
+  ChevronDown
 } from "lucide-react";
 import { formatDistanceToNow } from "date-fns";
+import { cn } from "@/lib/utils";
+import { 
+  Badge, 
+  Button, 
+  Input, 
+  Table, 
+  type Column 
+} from "@/components";
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL ?? "http://localhost:8000";
 
@@ -54,13 +59,11 @@ const MOCK_TICKETS: TicketRow[] = [
     priority: "High",
     status: "Open",
     created_at: new Date(Date.now() - 15 * 60 * 1000).toISOString(),
-    message:
-      "Hi, I requested a refund 7 days ago and I still haven't received it. My order #ACM-9922. Please help ASAP.",
+    message: "Hi, I requested a refund 7 days ago and I still haven't received it. My order #ACM-9922. Please help ASAP.",
     responses: [
       {
         sender: "AI Agent",
-        content:
-          "Hello John, I've looked into your refund for order #ACM-9922. It was processed on our end 5 days ago. Bank processing delays can take 5-10 business days. I'll escalate this to our billing team for immediate review.",
+        content: "Hello John, I've looked into your refund for order #ACM-9922. It was processed on our end 5 days ago. Bank processing delays can take 5-10 business days. I'll escalate this to our billing team for immediate review.",
         timestamp: new Date(Date.now() - 12 * 60 * 1000).toISOString(),
       },
     ],
@@ -74,13 +77,11 @@ const MOCK_TICKETS: TicketRow[] = [
     priority: "High",
     status: "In Progress",
     created_at: new Date(Date.now() - 45 * 60 * 1000).toISOString(),
-    message:
-      "Our integration is getting 503 errors on the POST /orders endpoint since 4pm. We are losing orders. Urgent.",
+    message: "Our integration is getting 503 errors on the POST /orders endpoint since 4pm. We are losing orders. Urgent.",
     responses: [
       {
         sender: "AI Agent",
-        content:
-          "Thank you for reporting this. I've identified an elevated error rate on the orders endpoint starting at 16:02 UTC. Our engineering team has been notified and is actively working on a fix. ETA: 30 minutes.",
+        content: "Thank you for reporting this. I've identified an elevated error rate on the orders endpoint starting at 16:02 UTC. Our engineering team has been notified and is actively working on a fix. ETA: 30 minutes.",
         timestamp: new Date(Date.now() - 30 * 60 * 1000).toISOString(),
       },
     ],
@@ -94,13 +95,11 @@ const MOCK_TICKETS: TicketRow[] = [
     priority: "Medium",
     status: "Resolved",
     created_at: new Date(Date.now() - 2 * 60 * 60 * 1000).toISOString(),
-    message:
-      "My account is locked. I tried to reset my password but now I cannot login. Help please.",
+    message: "My account is locked. I tried to reset my password but now I cannot login. Help please.",
     responses: [
       {
         sender: "AI Agent",
-        content:
-          "Hi Ahmed! I've unlocked your account and sent a fresh password reset link to your registered email. Please check your inbox (and spam folder). The link expires in 30 minutes.",
+        content: "Hi Ahmed! I've unlocked your account and sent a fresh password reset link to your registered email. Please check your inbox (and spam folder). The link expires in 30 minutes.",
         timestamp: new Date(Date.now() - 90 * 60 * 1000).toISOString(),
       },
     ],
@@ -114,47 +113,12 @@ const MOCK_TICKETS: TicketRow[] = [
     priority: "Low",
     status: "Closed",
     created_at: new Date(Date.now() - 24 * 60 * 60 * 1000).toISOString(),
-    message:
-      "Can you add a feature to export all transaction data to CSV? We need this for our accounting team.",
+    message: "Can you add a feature to export all transaction data to CSV? We need this for our accounting team.",
     responses: [
       {
         sender: "AI Agent",
-        content:
-          "Great idea, Sarah! I've logged this as a feature request (FR-441) and forwarded it to our product team. You'll be notified when it's added to the roadmap. In the meantime, our API supports bulk data retrieval — would that work?",
+        content: "Great idea, Sarah! I've logged this as a feature request (FR-441) and forwarded it to our product team. You'll be notified when it's added to the roadmap. In the meantime, our API supports bulk data retrieval — would that work?",
         timestamp: new Date(Date.now() - 23 * 60 * 60 * 1000).toISOString(),
-      },
-    ],
-  },
-  {
-    id: "TKT-2037",
-    customer_email: "marketing@corp.com",
-    customer_name: "Marketing Dept",
-    subject: "Invoice discrepancy — overcharged by $240",
-    channel: "email",
-    priority: "High",
-    status: "Open",
-    created_at: new Date(Date.now() - 3 * 60 * 60 * 1000).toISOString(),
-    message:
-      "Our invoice #INV-7821 shows a charge of $1,740 but our contract says $1,500. Please review and issue a corrected invoice.",
-    responses: [],
-  },
-  {
-    id: "TKT-2036",
-    customer_email: "+441234567890",
-    customer_name: "Emma Thompson",
-    subject: "Cannot update shipping address",
-    channel: "whatsapp",
-    priority: "Medium",
-    status: "In Progress",
-    created_at: new Date(Date.now() - 4 * 60 * 60 * 1000).toISOString(),
-    message:
-      "I ordered something 30 minutes ago but entered the wrong address. Can you change it before it ships?",
-    responses: [
-      {
-        sender: "AI Agent",
-        content:
-          "Hi Emma! I've put your order on hold and flagged it for address correction. Please reply with the correct shipping address and I'll update it right away.",
-        timestamp: new Date(Date.now() - 3.5 * 60 * 60 * 1000).toISOString(),
       },
     ],
   },
@@ -162,56 +126,22 @@ const MOCK_TICKETS: TicketRow[] = [
 
 // ─── Sub-components ───────────────────────────────────────────────────────────
 
-function ChannelBadge({ channel }: { channel: Channel }) {
-  const map: Record<Channel, { icon: React.ElementType; label: string; className: string }> = {
-    email: { icon: Mail, label: "Email", className: "bg-blue-400/10 text-blue-400 border border-blue-400/20" },
-    whatsapp: { icon: Phone, label: "WhatsApp", className: "bg-green-400/10 text-green-400 border border-green-400/20" },
-    web: { icon: Globe, label: "Web", className: "bg-purple-400/10 text-purple-400 border border-purple-400/20" },
-  };
-  const { icon: Icon, label, className } = map[channel];
-  return (
-    <span className={cn("inline-flex items-center gap-1.5 px-2 py-0.5 rounded-full text-[11px] font-semibold", className)}>
-      <Icon size={10} />
-      {label}
-    </span>
-  );
-}
-
-function PriorityBadge({ priority }: { priority: Priority }) {
-  const map: Record<Priority, "error" | "warning" | "success"> = {
-    High: "error",
-    Medium: "warning",
-    Low: "success",
-  };
-  return <Badge variant={map[priority]}>{priority}</Badge>;
-}
-
-function StatusBadge({ status }: { status: Status }) {
-  const map: Record<Status, "error" | "warning" | "success" | "neutral"> = {
-    Open: "error",
-    "In Progress": "warning",
-    Resolved: "success",
-    Closed: "neutral",
-  };
-  return <Badge variant={map[status]}>{status}</Badge>;
-}
-
 function ExpandedTicket({ ticket }: { ticket: TicketRow }) {
   return (
-    <div className="border-t border-bg-3 bg-bg-1/60 px-6 py-5 space-y-4 animate-fade-in">
+    <div className="bg-bg-1/40 px-10 py-8 space-y-6 animate-fade-in backdrop-blur-sm border-b border-white/5">
       {/* Customer message */}
-      <div>
-        <div className="flex items-center gap-2 mb-2">
-          <div className="w-6 h-6 rounded-full bg-bg-3 flex items-center justify-center">
-            <User size={12} className="text-text-tertiary" />
+      <div className="max-w-3xl">
+        <div className="flex items-center gap-3 mb-3">
+          <div className="w-8 h-8 rounded-full bg-bg-4 flex items-center justify-center text-text-tertiary">
+            <User size={14} />
           </div>
-          <span className="text-body-sm font-semibold text-text-primary">{ticket.customer_name}</span>
-          <span className="text-[10px] text-text-tertiary font-mono">
+          <span className="text-body-reg font-bold text-text-primary">{ticket.customer_name}</span>
+          <span className="text-[10px] text-text-quaternary font-mono uppercase tracking-tight">
             {formatDistanceToNow(new Date(ticket.created_at), { addSuffix: true })}
           </span>
         </div>
-        <div className="ml-8 bg-bg-2 border border-bg-3 rounded-lg p-3">
-          <p className="text-body-sm text-text-secondary leading-relaxed">
+        <div className="ml-11 bg-bg-2 border border-white/5 rounded-2xl p-5 shadow-sm">
+          <p className="text-body-reg text-text-secondary leading-relaxed">
             {ticket.message ?? "No message content."}
           </p>
         </div>
@@ -219,34 +149,37 @@ function ExpandedTicket({ ticket }: { ticket: TicketRow }) {
 
       {/* Responses */}
       {ticket.responses?.map((r, i) => (
-        <div key={i}>
-          <div className="flex items-center gap-2 mb-2">
-            <div className="w-6 h-6 rounded-full bg-accent-primary/20 flex items-center justify-center">
-              <span className="text-[9px] font-bold text-accent-primary">AI</span>
+        <div key={i} className="max-w-3xl">
+          <div className="flex items-center gap-3 mb-3">
+            <div className="w-8 h-8 rounded-full bg-accent-primary/10 border border-accent-primary/20 flex items-center justify-center">
+              <span className="text-[10px] font-black text-accent-primary uppercase">Agent</span>
             </div>
-            <span className="text-body-sm font-semibold text-accent-primary">{r.sender}</span>
-            <span className="text-[10px] text-text-tertiary font-mono">
+            <span className="text-body-reg font-bold text-accent-primary">{r.sender}</span>
+            <span className="text-[10px] text-text-quaternary font-mono uppercase tracking-tight">
               {formatDistanceToNow(new Date(r.timestamp), { addSuffix: true })}
             </span>
           </div>
-          <div className="ml-8 bg-bg-2 border-l-2 border-accent-primary/50 rounded-r-lg pl-3 pr-3 py-3">
-            <p className="text-body-sm text-text-secondary leading-relaxed">{r.content}</p>
+          <div className="ml-11 bg-bg-2 border-l-2 border-accent-primary/40 rounded-r-2xl pl-5 pr-5 py-5 shadow-sm">
+            <p className="text-body-reg text-text-secondary leading-relaxed">{r.content}</p>
           </div>
         </div>
       ))}
 
       {(!ticket.responses || ticket.responses.length === 0) && (
-        <p className="text-body-sm text-text-tertiary italic ml-8">
-          No responses yet — AI agent is processing...
-        </p>
+        <div className="ml-11 flex items-center gap-3 py-4">
+          <div className="w-1.5 h-1.5 rounded-full bg-accent-primary animate-pulse" />
+          <p className="text-body-sm text-text-quaternary font-bold uppercase tracking-widest">
+            Agent stream active...
+          </p>
+        </div>
       )}
 
-      <div className="flex justify-end">
+      <div className="flex justify-end pt-4">
         <Link
           href={`/tickets/${ticket.id}`}
-          className="flex items-center gap-1.5 text-body-sm text-accent-primary hover:underline"
+          className="flex items-center gap-2 text-body-reg font-bold text-accent-primary hover:text-accent-primary/80 transition-colors"
         >
-          View full ticket <ExternalLink size={12} />
+          View Full Session <ExternalLink size={14} />
         </Link>
       </div>
     </div>
@@ -263,8 +196,7 @@ export default function TicketsPage() {
   const [statusFilter, setStatusFilter] = useState<"all" | Status>("all");
   const [priorityFilter, setPriorityFilter] = useState<"all" | Priority>("all");
   const [expandedId, setExpandedId] = useState<string | null>(null);
-  const [sortKey, setSortKey] = useState<keyof TicketRow>("created_at");
-  const [sortDir, setSortDir] = useState<"asc" | "desc">("desc");
+  const [sortConfig, setSortConfig] = useState<{ key: string; direction: 'asc' | 'desc' } | null>({ key: 'created_at', direction: 'desc' });
 
   const fetchTickets = useCallback(async () => {
     setLoading(true);
@@ -285,13 +217,12 @@ export default function TicketsPage() {
     fetchTickets();
   }, [fetchTickets]);
 
-  const handleSort = (key: keyof TicketRow) => {
-    if (sortKey === key) {
-      setSortDir((d) => (d === "asc" ? "desc" : "asc"));
-    } else {
-      setSortKey(key);
-      setSortDir("asc");
+  const handleSort = (key: string) => {
+    let direction: 'asc' | 'desc' = 'asc';
+    if (sortConfig?.key === key && sortConfig.direction === 'asc') {
+      direction = 'desc';
     }
+    setSortConfig({ key, direction });
   };
 
   const filtered = tickets
@@ -309,209 +240,224 @@ export default function TicketsPage() {
       return matchesSearch && matchesChannel && matchesStatus && matchesPriority;
     })
     .sort((a, b) => {
-      const aVal = a[sortKey] ?? "";
-      const bVal = b[sortKey] ?? "";
+      if (!sortConfig) return 0;
+      const aVal = a[sortConfig.key as keyof TicketRow] ?? "";
+      const bVal = b[sortConfig.key as keyof TicketRow] ?? "";
       const cmp = String(aVal).localeCompare(String(bVal));
-      return sortDir === "asc" ? cmp : -cmp;
+      return sortConfig.direction === "asc" ? cmp : -cmp;
     });
 
-  function SortIcon({ col }: { col: keyof TicketRow }) {
-    if (sortKey !== col) return null;
-    return sortDir === "asc" ? (
-      <ChevronUp size={12} className="inline ml-1" />
-    ) : (
-      <ChevronDown size={12} className="inline ml-1" />
-    );
-  }
+  const columns: Column<TicketRow>[] = [
+    { 
+      header: "Session ID", 
+      accessor: (t) => <span className="font-mono text-accent-primary font-bold">{t.id}</span>,
+      sortable: true,
+      className: "w-[120px]"
+    },
+    { 
+      header: "Customer", 
+      accessor: (t) => (
+        <div className="min-w-0">
+          <p className="text-body-reg font-bold text-text-primary truncate">{t.customer_name}</p>
+          <p className="text-[10px] text-text-quaternary font-medium truncate mt-0.5 uppercase tracking-wider">{t.customer_email}</p>
+        </div>
+      ),
+      sortable: true 
+    },
+    { 
+      header: "Subject", 
+      accessor: (t) => <p className="text-body-reg text-text-secondary truncate font-medium max-w-[300px]">{t.subject}</p>,
+      sortable: true
+    },
+    { 
+      header: "Channel", 
+      accessor: (t) => {
+        const Icon = t.channel === 'email' ? Mail : t.channel === 'whatsapp' ? Phone : Globe;
+        return (
+          <div className={cn(
+            "inline-flex items-center gap-2 px-3 py-1 rounded-full text-[10px] font-black uppercase tracking-widest border",
+            t.channel === 'email' ? "bg-accent-secondary/10 text-accent-secondary border-accent-secondary/20" :
+            t.channel === 'whatsapp' ? "bg-success/10 text-success border-success/20" :
+            "bg-blue-400/10 text-blue-400 border-blue-400/20"
+          )}>
+            <Icon size={10} />
+            {t.channel}
+          </div>
+        );
+      },
+      sortable: true
+    },
+    { 
+      header: "Priority", 
+      accessor: (t) => (
+        <Badge variant={t.priority === 'High' ? 'error' : t.priority === 'Medium' ? 'warning' : 'success'} className="font-black uppercase tracking-[0.1em] text-[9px] min-w-[70px]">
+          {t.priority}
+        </Badge>
+      ),
+      sortable: true
+    },
+    { 
+      header: "Status", 
+      accessor: (t) => (
+        <Badge variant={t.status === 'Resolved' ? 'success' : t.status === 'Open' ? 'error' : t.status === 'In Progress' ? 'warning' : 'neutral'} className="font-black uppercase tracking-[0.1em] text-[9px] min-w-[90px]">
+          {t.status}
+        </Badge>
+      ),
+      sortable: true
+    },
+    { 
+      header: "Age", 
+      accessor: (t) => (
+        <span className="text-body-sm text-text-quaternary font-mono uppercase font-bold tracking-tight flex items-center gap-2 whitespace-nowrap">
+          <Clock size={12} className="text-accent-primary/50" />
+          {formatDistanceToNow(new Date(t.created_at), { addSuffix: false })}
+        </span>
+      ),
+      sortable: true,
+      className: "text-right"
+    },
+    {
+      header: "",
+      accessor: (t) => (
+        <div className={cn("p-1.5 rounded-lg transition-all", expandedId === t.id ? "bg-accent-primary/10 text-accent-primary rotate-180" : "text-text-quaternary group-hover:text-text-primary")}>
+          <ChevronDown size={16} />
+        </div>
+      ),
+      className: "w-[40px] text-right"
+    }
+  ];
 
   const openCount = tickets.filter((t) => t.status === "Open").length;
 
   return (
-    <div className="p-6 md:p-8 max-w-[1400px] mx-auto space-y-6">
+    <div className="p-10 md:p-14 max-w-[1500px] mx-auto space-y-12 animate-fade-in">
       {/* Header */}
-      <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
-        <div>
-          <h1 className="text-h1 font-bold text-text-primary">Support Tickets</h1>
-          <p className="text-body-reg text-text-secondary mt-1">
-            {tickets.length} total · {" "}
-            <span className="text-red-400 font-semibold">{openCount} open</span>
+      <div className="flex flex-col md:flex-row md:items-end justify-between gap-8 border-b border-white/5 pb-10">
+        <div className="space-y-3">
+          <h1 className="text-h1 tracking-tighter bg-gradient-to-r from-text-primary to-text-secondary bg-clip-text text-transparent uppercase">
+            Queue Intelligence
+          </h1>
+          <p className="text-body-reg text-text-tertiary tracking-wide font-medium flex items-center gap-3">
+            <span className="px-3 py-1 bg-bg-2 border border-white/5 rounded-full text-body-sm font-bold text-text-secondary">{tickets.length} interactions</span>
+            <span className="w-1 h-1 bg-white/20 rounded-full" />
+            <span className="text-error font-black uppercase tracking-widest text-[11px] flex items-center gap-1.5">
+              <span className="w-1.5 h-1.5 rounded-full bg-error animate-pulse shadow-[0_0_8px_rgba(248,113,113,0.5)]" />
+              {openCount} active escalation{openCount !== 1 ? 's' : ''}
+            </span>
           </p>
         </div>
-        <button
+        <Button
+          variant="neutral"
           onClick={fetchTickets}
           disabled={loading}
-          className="flex items-center gap-2 px-4 py-2 rounded-lg bg-bg-2 border border-bg-3 hover:border-accent-primary/40 text-body-sm text-text-secondary hover:text-text-primary transition-all disabled:opacity-50"
+          className="px-6 py-3 rounded-xl border-white/5 bg-white/5 hover:bg-white/[0.08] hover:border-accent-primary/40 text-body-sm font-black uppercase tracking-widest transition-all"
         >
-          <RefreshCw size={14} className={loading ? "animate-spin" : ""} />
-          {loading ? "Loading..." : "Refresh"}
-        </button>
+          <RefreshCw size={14} className={cn("mr-2", loading && "animate-spin")} />
+          {loading ? "Syncing..." : "Sync Vitals"}
+        </Button>
       </div>
 
-      {/* Filters */}
-      <div className="flex flex-wrap gap-3 items-center">
+      {/* Control Panel */}
+      <div className="flex flex-col lg:flex-row lg:items-center gap-6">
         {/* Search */}
-        <div className="relative flex-1 min-w-[220px]">
-          <Search size={15} className="absolute left-3 top-1/2 -translate-y-1/2 text-text-tertiary" />
-          <input
-            type="text"
-            placeholder="Search by ID, customer, subject..."
+        <div className="flex-1">
+          <Input
+            placeholder="Search session telemetry, customer profiles, or subjects..."
             value={search}
             onChange={(e) => setSearch(e.target.value)}
-            className="w-full pl-9 pr-4 py-2 bg-bg-2 border border-bg-3 rounded-lg text-body-sm text-text-primary placeholder:text-text-tertiary focus:outline-none focus:border-accent-primary/60 transition-colors"
+            className="rounded-xl border-white/5 bg-bg-2/50 backdrop-blur-md px-6 py-3 text-body-reg h-[54px]"
+            icon={<Search size={18} className="text-text-quaternary" />}
           />
         </div>
 
-        {/* Channel filter */}
-        <div className="flex items-center gap-1 bg-bg-2 border border-bg-3 rounded-lg p-1">
-          {(["all", "email", "whatsapp", "web"] as const).map((c) => (
-            <button
-              key={c}
-              onClick={() => setChannelFilter(c)}
-              className={cn(
-                "px-3 py-1.5 rounded-md text-[11px] font-semibold capitalize transition-all",
-                channelFilter === c
-                  ? "bg-accent-primary text-white shadow-sm"
-                  : "text-text-tertiary hover:text-text-primary"
-              )}
-            >
-              {c === "all" ? "All Channels" : c === "whatsapp" ? "WhatsApp" : c.charAt(0).toUpperCase() + c.slice(1)}
-            </button>
-          ))}
-        </div>
-
-        {/* Status filter */}
-        <select
-          value={statusFilter}
-          onChange={(e) => setStatusFilter(e.target.value as typeof statusFilter)}
-          className="px-3 py-2 bg-bg-2 border border-bg-3 rounded-lg text-body-sm text-text-primary focus:outline-none focus:border-accent-primary/60 transition-colors appearance-none cursor-pointer"
-        >
-          <option value="all">All Status</option>
-          <option value="Open">Open</option>
-          <option value="In Progress">In Progress</option>
-          <option value="Resolved">Resolved</option>
-          <option value="Closed">Closed</option>
-        </select>
-
-        {/* Priority filter */}
-        <select
-          value={priorityFilter}
-          onChange={(e) => setPriorityFilter(e.target.value as typeof priorityFilter)}
-          className="px-3 py-2 bg-bg-2 border border-bg-3 rounded-lg text-body-sm text-text-primary focus:outline-none focus:border-accent-primary/60 transition-colors appearance-none cursor-pointer"
-        >
-          <option value="all">All Priority</option>
-          <option value="High">High</option>
-          <option value="Medium">Medium</option>
-          <option value="Low">Low</option>
-        </select>
-
-        <div className="flex items-center gap-1 text-body-sm text-text-tertiary ml-auto">
-          <Filter size={14} />
-          <span>{filtered.length} results</span>
-        </div>
-      </div>
-
-      {/* Table */}
-      <div className="rounded-xl bg-bg-2 border border-bg-3 overflow-hidden">
-        {/* Table header */}
-        <div className="grid grid-cols-[1fr_1.5fr_2fr_auto_auto_auto_auto] gap-4 px-6 py-3 border-b border-bg-3 bg-bg-1/50">
-          {[
-            { label: "Ticket ID", key: "id" as keyof TicketRow },
-            { label: "Customer", key: "customer_name" as keyof TicketRow },
-            { label: "Subject", key: "subject" as keyof TicketRow },
-            { label: "Channel", key: "channel" as keyof TicketRow },
-            { label: "Priority", key: "priority" as keyof TicketRow },
-            { label: "Status", key: "status" as keyof TicketRow },
-            { label: "Created", key: "created_at" as keyof TicketRow },
-          ].map((col) => (
-            <button
-              key={col.key}
-              onClick={() => handleSort(col.key)}
-              className="text-left text-[11px] uppercase tracking-widest text-text-tertiary font-bold hover:text-text-primary transition-colors"
-            >
-              {col.label}
-              <SortIcon col={col.key} />
-            </button>
-          ))}
-        </div>
-
-        {/* Empty state */}
-        {filtered.length === 0 && (
-          <div className="flex flex-col items-center justify-center py-16 gap-4">
-            <Ticket size={40} className="text-text-tertiary opacity-40" />
-            <p className="text-body-reg text-text-tertiary">No tickets match your filters</p>
-            <button
-              onClick={() => { setSearch(""); setChannelFilter("all"); setStatusFilter("all"); setPriorityFilter("all"); }}
-              className="text-body-sm text-accent-primary hover:underline"
-            >
-              Clear all filters
-            </button>
-          </div>
-        )}
-
-        {/* Rows */}
-        {filtered.map((ticket) => {
-          const isExpanded = expandedId === ticket.id;
-          return (
-            <div key={ticket.id} className="border-b border-bg-3 last:border-0">
+        {/* Filters Grid */}
+        <div className="flex flex-wrap items-center gap-4">
+          {/* Channel selector */}
+          <div className="flex bg-bg-2/80 backdrop-blur-md border border-white/5 rounded-xl p-1.5 shadow-xl">
+            {(["all", "email", "whatsapp", "web"] as const).map((c) => (
               <button
-                onClick={() => setExpandedId(isExpanded ? null : ticket.id)}
-                className="w-full text-left grid grid-cols-[1fr_1.5fr_2fr_auto_auto_auto_auto] gap-4 px-6 py-4 hover:bg-bg-3/50 transition-colors items-center group"
+                key={c}
+                onClick={() => setChannelFilter(c)}
+                className={cn(
+                  "px-5 py-2 rounded-lg text-body-sm font-black uppercase tracking-widest transition-all",
+                  channelFilter === c
+                    ? "bg-accent-primary text-bg-1 shadow-[0_0_20px_rgba(16,185,129,0.2)]"
+                    : "text-text-tertiary hover:text-text-primary hover:bg-white/5"
+                )}
               >
-                <span className="font-mono text-body-sm text-accent-primary font-bold">{ticket.id}</span>
-                <div className="min-w-0">
-                  <p className="text-body-sm font-semibold text-text-primary truncate">{ticket.customer_name}</p>
-                  <p className="text-[11px] text-text-tertiary truncate">{ticket.customer_email}</p>
-                </div>
-                <p className="text-body-sm text-text-secondary truncate">{ticket.subject}</p>
-                <ChannelBadge channel={ticket.channel} />
-                <PriorityBadge priority={ticket.priority} />
-                <StatusBadge status={ticket.status} />
-                <div className="flex items-center gap-2">
-                  <span className="text-[11px] text-text-tertiary font-mono flex items-center gap-1">
-                    <Clock size={10} />
-                    {formatDistanceToNow(new Date(ticket.created_at), { addSuffix: true })}
-                  </span>
-                  {isExpanded ? (
-                    <ChevronUp size={14} className="text-text-tertiary group-hover:text-text-primary transition-colors" />
-                  ) : (
-                    <ChevronDown size={14} className="text-text-tertiary group-hover:text-text-primary transition-colors" />
-                  )}
-                </div>
+                {c}
               </button>
-              {isExpanded && <ExpandedTicket ticket={ticket} />}
-            </div>
-          );
-        })}
-      </div>
+            ))}
+          </div>
 
-      {/* Pagination placeholder */}
-      <div className="flex items-center justify-between text-body-sm text-text-tertiary">
-        <span>Showing {filtered.length} of {tickets.length} tickets</span>
-        <div className="flex items-center gap-2">
-          <button
-            disabled
-            className="px-4 py-2 rounded-lg bg-bg-2 border border-bg-3 text-text-tertiary disabled:opacity-40 cursor-default"
+          <div className="h-10 w-px bg-white/5 hidden sm:block" />
+
+          {/* Status selector */}
+          <select
+            value={statusFilter}
+            onChange={(e) => setStatusFilter(e.target.value as typeof statusFilter)}
+            className="px-5 py-3 bg-bg-2/80 backdrop-blur-md border border-white/5 rounded-xl text-body-sm font-black text-text-secondary uppercase tracking-widest focus:outline-none focus:border-accent-primary/50 transition-all appearance-none cursor-pointer hover:bg-bg-4 h-[54px] min-w-[160px]"
           >
-            Previous
-          </button>
-          <span className="px-3 py-2 rounded-lg bg-accent-primary/10 border border-accent-primary/20 text-accent-primary text-body-sm font-bold">
-            1
-          </span>
-          <button
-            disabled
-            className="px-4 py-2 rounded-lg bg-bg-2 border border-bg-3 text-text-tertiary disabled:opacity-40 cursor-default"
+            <option value="all">ALL STATUS</option>
+            <option value="Open">OPEN</option>
+            <option value="In Progress">ACTIVE</option>
+            <option value="Resolved">RESOLVED</option>
+            <option value="Closed">CLOSED</option>
+          </select>
+
+          {/* Priority selector */}
+          <select
+            value={priorityFilter}
+            onChange={(e) => setPriorityFilter(e.target.value as typeof priorityFilter)}
+            className="px-5 py-3 bg-bg-2/80 backdrop-blur-md border border-white/5 rounded-xl text-body-sm font-black text-text-secondary uppercase tracking-widest focus:outline-none focus:border-accent-primary/50 transition-all appearance-none cursor-pointer hover:bg-bg-4 h-[54px] min-w-[160px]"
           >
-            Next
-          </button>
+            <option value="all">ALL PRIORITY</option>
+            <option value="High">HIGH</option>
+            <option value="Medium">MEDIUM</option>
+            <option value="Low">LOW</option>
+          </select>
+
+          <div className="flex items-center gap-3 text-body-sm font-black text-text-quaternary uppercase tracking-widest ml-auto bg-white/5 px-4 py-2.5 rounded-xl border border-white/5">
+            <Filter size={14} className="text-accent-primary" />
+            <span>{filtered.length} indexed</span>
+          </div>
         </div>
       </div>
 
-      {/* API offline notice */}
+      {/* Main Table */}
+      <Table 
+        columns={columns} 
+        data={filtered} 
+        sortConfig={sortConfig} 
+        onSort={handleSort}
+        onRowClick={(t) => setExpandedId(expandedId === t.id ? null : t.id)}
+        renderExpandedRow={(t) => <ExpandedTicket ticket={t} />}
+        expandedRowId={expandedId}
+        emptyMessage="No telemetry data matching current filters."
+      />
+
+      {/* Footer / Pagination */}
+      <div className="flex flex-col md:flex-row items-center justify-between gap-6 pt-6">
+        <div className="text-body-sm text-text-tertiary font-bold uppercase tracking-widest flex items-center gap-3">
+          <span>Showing index 1 - {filtered.length}</span>
+          <span className="w-1 h-1 bg-white/10 rounded-full" />
+          <span className="text-text-quaternary">{tickets.length} total nodes recorded</span>
+        </div>
+        
+        <div className="flex items-center gap-3">
+          <Button variant="neutral" size="sm" disabled className="px-6 rounded-xl border-white/5 text-body-sm font-black uppercase tracking-widest opacity-30">Previous</Button>
+          <div className="w-10 h-10 rounded-xl bg-accent-primary/10 border border-accent-primary/20 flex items-center justify-center text-accent-primary text-body-sm font-black shadow-inner">1</div>
+          <Button variant="neutral" size="sm" disabled className="px-6 rounded-xl border-white/5 text-body-sm font-black uppercase tracking-widest opacity-30">Next</Button>
+        </div>
+      </div>
+
+      {/* System Status Alert */}
       {!loading && (
-        <div className="flex items-center gap-2 text-[11px] text-text-tertiary border border-bg-3 rounded-lg px-4 py-2 bg-bg-2 w-fit">
-          <AlertTriangle size={12} className="text-warning" />
-          Showing demo data. Connect backend at{" "}
-          <code className="font-mono text-accent-primary">{API_URL}</code> for live tickets.
+        <div className="flex items-center gap-4 text-[10px] text-text-quaternary border border-white/5 rounded-2xl px-6 py-4 bg-bg-2/30 backdrop-blur-sm w-fit animate-fade-in group">
+          <AlertTriangle size={14} className="text-warning group-hover:animate-pulse" />
+          <p className="font-bold uppercase tracking-[0.2em] leading-none">
+            Synthetic session data active · API Endpoint: <code className="font-mono text-accent-primary opacity-80">{API_URL}</code> · Mode: Demo
+          </p>
         </div>
       )}
     </div>

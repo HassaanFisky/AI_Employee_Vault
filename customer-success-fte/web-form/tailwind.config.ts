@@ -1,107 +1,101 @@
-import type { Config } from 'tailwindcss';
+import type { Config } from "tailwindcss";
+import { colors } from "./src/tokens/colors";
+import { spacing, radii } from "./src/tokens/spacing";
+import { typography } from "./src/tokens/typography";
 
 const config: Config = {
   content: [
-    './src/pages/**/*.{js,ts,jsx,tsx,mdx}',
-    './src/components/**/*.{js,ts,jsx,tsx,mdx}',
-    './src/app/**/*.{js,ts,jsx,tsx,mdx}',
+    "./src/components/**/*.{js,ts,jsx,tsx,mdx}",
+    "./src/app/**/*.{js,ts,jsx,tsx,mdx}",
   ],
   theme: {
+    container: {
+      center: true,
+      padding: "2rem",
+      screens: {
+        "2xl": "1400px",
+      },
+    },
     extend: {
       colors: {
-        bg: {
-          1: '#0F172A',
-          2: '#1E293B',
-          3: '#334155',
-          4: '#475569',
-        },
-        text: {
-          primary: '#F8FAFC',
-          secondary: '#CBD5E1',
-          tertiary: '#94A3B8',
-          inverse: '#0F172A',
-        },
-        accent: {
-          primary: '#10B981',
-          hover: '#059669',
-          light: '#ECFDF5',
-          border: '#A7F3D0',
-        },
-        success: '#10B981',
-        warning: '#F59E0B',
-        error: '#EF4444',
-        info: '#3B82F6',
+        ...colors,
       },
       spacing: {
-        xs: '4px',
-        sm: '8px',
-        md: '16px',
-        lg: '24px',
-        xl: '32px',
-        '2xl': '48px',
-        '3xl': '64px',
+        ...spacing,
+      },
+      borderRadius: {
+        ...radii,
+      },
+      fontFamily: {
+        ...typography.fontFamily,
       },
       fontSize: {
-        'body-sm': ['12px', '18px'],
-        'body-reg': ['14px', '22px'],
-        'body-lg': ['16px', '24px'],
-        'h1': ['32px', '40px'],
-        'h2': ['24px', '32px'],
-        'h3': ['20px', '28px'],
+        ...typography.fontSize,
       },
       fontWeight: {
-        normal: '400',
-        medium: '500',
-        semibold: '600',
+        ...typography.fontWeight,
       },
       boxShadow: {
-        sm: '0 1px 2px rgba(0,0,0,0.08)',
-        md: '0 4px 6px rgba(0,0,0,0.12)',
-        lg: '0 10px 25px rgba(0,0,0,0.15)',
-        xl: '0 20px 40px rgba(0,0,0,0.2)',
-        focus: '0 0 0 3px rgba(16,185,129,0.1)',
+        sm: "0 2px 8px rgba(0,0,0,0.06)",
+        md: "0 4px 16px rgba(0,0,0,0.1)",
+        lg: "0 12px 32px rgba(0,0,0,0.15)",
+        xl: "0 24px 64px rgba(0,0,0,0.2)",
+        "glow-primary": "0 0 24px rgba(16,185,129,0.3)",
+        "glow-warning": "0 0 24px rgba(245,158,11,0.3)",
+        "glow-error": "0 0 24px rgba(239,68,68,0.3)",
+        focus: "0 0 0 3px rgba(16,185,129,0.2)",
       },
       animation: {
-        'fade-in': 'fadeIn 300ms cubic-bezier(0.4, 0, 0.2, 1)',
-        'slide-up': 'slideUp 250ms cubic-bezier(0.4, 0, 0.2, 1)',
-        'bounce-in': 'bounceIn 400ms cubic-bezier(0.68, -0.55, 0.265, 1.55)',
-        'spin-slow': 'spin 2s linear infinite',
-        'float': 'float 3s ease-in-out infinite',
-        'pulse-glow': 'pulseGlow 2s cubic-bezier(0.4, 0, 0.6, 1) infinite',
+        "fade-in": "fadeIn 300ms cubic-bezier(0.4, 0, 0.2, 1)",
+        "slide-up": "slideUp 250ms cubic-bezier(0.4, 0, 0.2, 1)",
+        "bounce-in": "bounceIn 400ms cubic-bezier(0.68, -0.55, 0.265, 1.55)",
+        "spin-slow": "spin 2s linear infinite",
+        float: "float 3s ease-in-out infinite",
+        "pulse-glow": "pulseGlow 2s cubic-bezier(0.4, 0, 0.6, 1) infinite",
+        shimmer: "shimmer 2s infinite",
       },
       keyframes: {
         fadeIn: {
-          '0%': { opacity: '0' },
-          '100%': { opacity: '1' },
+          "0%": { opacity: "0" },
+          "100%": { opacity: "1" },
         },
         slideUp: {
-          '0%': { opacity: '0', transform: 'translateY(10px)' },
-          '100%': { opacity: '1', transform: 'translateY(0)' },
+          "0%": { opacity: "0", transform: "translateY(10px)" },
+          "100%": { opacity: "1", transform: "translateY(0)" },
         },
         bounceIn: {
-          '0%': { transform: 'scale(0.3)', opacity: '0' },
-          '50%': { transform: 'scale(1.05)' },
-          '70%': { transform: 'scale(0.9)' },
-          '100%': { transform: 'scale(1)', opacity: '1' },
+          "0%": { transform: "scale(0.3)", opacity: "0" },
+          "50%": { transform: "scale(1.05)" },
+          "70%": { transform: "scale(0.9)" },
+          "100%": { transform: "scale(1)", opacity: "1" },
         },
         float: {
-          '0%, 100%': { transform: 'translateY(0)' },
-          '50%': { transform: 'translateY(-4px)' },
+          "0%, 100%": { transform: "translateY(0)" },
+          "50%": { transform: "translateY(-4px)" },
         },
         pulseGlow: {
-          '0%, 100%': { opacity: '1', filter: 'drop-shadow(0 0 4px rgba(16,185,129,0.3))' },
-          '50%': { opacity: '0.8', filter: 'drop-shadow(0 0 12px rgba(16,185,129,0.7))' },
+          "0%, 100%": {
+            opacity: "1",
+            filter: "drop-shadow(0 0 4px rgba(16,185,129,0.3))",
+          },
+          "50%": {
+            opacity: "0.8",
+            filter: "drop-shadow(0 0 12px rgba(16,185,129,0.7))",
+          },
+        },
+        shimmer: {
+          "100%": { transform: "translateX(100%)" },
         },
       },
       transitionDuration: {
-        fast: '150ms',
-        base: '250ms',
-        slow: '400ms',
+        fast: "150ms",
+        base: "250ms",
+        slow: "400ms",
       },
       transitionTimingFunction: {
-        'ease-out': 'cubic-bezier(0.4, 0, 0.2, 1)',
-        'ease-in': 'cubic-bezier(0.4, 0, 1, 1)',
-        'ease-in-out': 'cubic-bezier(0.4, 0, 0.2, 1)',
+        "ease-out": "cubic-bezier(0.4, 0, 0.2, 1)",
+        "ease-in": "cubic-bezier(0.4, 0, 1, 1)",
+        "ease-in-out": "cubic-bezier(0.4, 0, 0.2, 1)",
       },
     },
   },
@@ -109,4 +103,3 @@ const config: Config = {
 };
 
 export default config;
-

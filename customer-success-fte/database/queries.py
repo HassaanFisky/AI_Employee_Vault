@@ -3,7 +3,9 @@ import os
 import json
 from dotenv import load_dotenv
 
-load_dotenv()
+# Load env from project root
+dotenv_path = os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), ".env")
+load_dotenv(dotenv_path)
 _pool = None
 
 async def get_db_pool():

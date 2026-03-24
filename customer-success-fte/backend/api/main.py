@@ -291,7 +291,7 @@ async def get_ticket(ticket_id: str):
                 {
                     "id": "msg-001",
                     "sender": "ai",
-                    "name": "ARIA AI Agent",
+                    "name": "WHOOSH AI Agent",
                     "content": "Thank you for reaching out! I'm reviewing your request now and will get back to you shortly.",
                     "timestamp": now.isoformat(),
                 }

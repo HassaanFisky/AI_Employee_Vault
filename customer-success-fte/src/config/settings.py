@@ -44,8 +44,8 @@ class Settings(BaseSettings):
     redis_queue_deadletter: str = Field("customer_messages_deadletter")
 
     # ── Gmail ───────────────────────────────────────────────────────────────
-    gmail_credentials_json: str = Field("/app/secrets/gmail_credentials.json")
-    gmail_token_json: str = Field("/app/secrets/gmail_token.json")
+    gmail_credentials_path: str = Field("/app/secrets/gmail_credentials.json", description="Path to Gmail OAuth credentials JSON file")
+    gmail_token_path: str = Field("/app/secrets/gmail_token.json", description="Path to Gmail OAuth token JSON file (auto-generated)")
     gmail_scopes: str = Field("https://www.googleapis.com/auth/gmail.modify")
     gmail_poll_interval_seconds: int = Field(30, ge=5, le=300)
     gmail_delegated_user: str = Field("support@yourcompany.com")

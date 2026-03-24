@@ -1,25 +1,38 @@
 import type { Metadata } from "next";
+import { Plus_Jakarta_Sans, JetBrains_Mono } from "next/font/google";
 import "./globals.css";
 
+const jakarta = Plus_Jakarta_Sans({
+  subsets: ["latin"],
+  weight: ["400", "500", "600", "700", "800"],
+  variable: "--font-jakarta",
+});
+
+const jetbrains = JetBrains_Mono({
+  subsets: ["latin"],
+  weight: ["400", "500"],
+  variable: "--font-jetbrains",
+});
+
 export const metadata: Metadata = {
-  title: "ARIA | Customer Success Engine",
-  description: "ARIA — 24/7 AI-powered customer success. Autonomous support across Email, WhatsApp, and Web. Built on Groq, Neon, and Kafka.",
-  keywords: ["customer success", "AI support", "ARIA", "intelligent agent", "24/7 assistance", "Groq", "LLM"],
+  title: "WHOOSH | AI Operations · Lightning Fast",
+  description: "WHOOSH — Lightning Fast AI Customer Success Operations.",
+  keywords: ["WHOOSH", "AI operations", "intelligent agent", "lightning fast"],
   icons: {
     icon: "/favicon.png",
     apple: "/favicon.png",
   },
   openGraph: {
-    title: "ARIA | Customer Support Engine",
-    description: "24/7 Autonomous AI Customer Support — Email, WhatsApp, Web",
+    title: "WHOOSH | AI Operations",
+    description: "Lightning Fast AI Customer Success Operations",
     type: "website",
-    siteName: "ARIA by TechCorp",
+    siteName: "WHOOSH",
   },
   twitter: {
     card: "summary_large_image",
-    title: "ARIA | Customer Success Engine",
-    description: "24/7 AI-powered customer success. Built on Groq llama-3.3-70b.",
-  }
+    title: "WHOOSH | AI Operations",
+    description: "Lightning Fast AI Customer Success Operations.",
+  },
 };
 
 /**
@@ -31,11 +44,13 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="en" className="dark scroll-smooth">
-      <body className="antialiased min-h-screen bg-bg-1 text-text-primary selection:bg-accent-primary/20 selection:text-accent-primary">
+    <html
+      lang="en"
+      className={`dark scroll-smooth ${jakarta.variable} ${jetbrains.variable}`}
+    >
+      <body className="antialiased min-h-screen bg-bg-1 text-text-primary selection:bg-accent-primary/20 selection:text-accent-primary font-sans">
         {children}
       </body>
     </html>
   );
 }
-

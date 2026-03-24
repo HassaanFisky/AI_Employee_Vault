@@ -132,23 +132,23 @@ export const SupportForm: React.FC = () => {
 
   if (status === 'success' && ticketId) {
     return (
-      <div className="max-w-[600px] mx-auto p-lg animate-fade-in">
-        <Card className="bg-accent-light border-accent-border p-[32px] text-center flex flex-col items-center gap-lg">
-          <div className="w-[100px] h-[100px] bg-accent-primary flex items-center justify-center rounded-full animate-bounce-in text-white">
-            <Check size={60} strokeWidth={3} className="animate-draw-check" />
+      <div className="max-w-[600px] mx-auto p-10 animate-fade-in">
+        <Card className="bg-bg-2 border-white/10 p-[48px] text-center flex flex-col items-center gap-8 rounded-3xl backdrop-blur-xl shadow-2xl">
+          <div className="w-[100px] h-[100px] bg-accent-primary flex items-center justify-center rounded-3xl animate-bounce-in text-bg-1 shadow-[0_0_30px_rgba(16,185,129,0.3)]">
+            <Check size={50} strokeWidth={4} />
           </div>
-          <div className="space-y-sm">
-            <h2 className="text-h2 text-text-inverse font-semibold">Support Request Submitted</h2>
-            <p className="font-mono text-text-tertiary">{ticketId}</p>
+          <div className="space-y-3">
+            <h2 className="text-h1 tracking-tighter text-text-primary font-bold">Session Initialized</h2>
+            <p className="font-mono text-body-sm text-accent-primary font-bold uppercase tracking-widest">{ticketId}</p>
           </div>
-          <p className="text-body-reg text-text-inverse opacity-80 max-w-[400px]">
-            Your support request has been received. We&apos;ll respond within 24 hours.
+          <p className="text-body-reg text-text-secondary leading-relaxed opacity-90 max-w-[400px]">
+            Your WHOOSH support session has been queued. An intelligent agent will respond shortly within your private dashboard.
           </p>
-          <div className="flex flex-col gap-md w-full">
-            <Button onClick={() => router.push(`/tickets/${ticketId}`)}>
-              Check Status
+          <div className="flex flex-col gap-4 w-full pt-4">
+            <Button className="w-full py-4 rounded-xl text-body-reg font-black uppercase tracking-[0.1em]" onClick={() => router.push(`/tickets/${ticketId}`)}>
+              Enter Session
             </Button>
-            <Button variant="ghost" className="text-text-inverse hover:bg-black/5" onClick={() => {
+            <Button variant="ghost" className="text-text-quaternary hover:text-text-secondary font-bold uppercase tracking-widest text-[11px]" onClick={() => {
               setStatus('idle');
               setFormData({
                 full_name: '',
@@ -160,7 +160,7 @@ export const SupportForm: React.FC = () => {
               });
               setTouched({});
             }}>
-              Submit Another Request
+              New Request
             </Button>
           </div>
         </Card>
@@ -169,13 +169,15 @@ export const SupportForm: React.FC = () => {
   }
 
   return (
-    <div className="max-w-[600px] mx-auto p-lg animate-slide-up">
+    <div className="max-w-[600px] mx-auto p-10 animate-slide-up">
       {/* Hero Section */}
-      <div className="text-center mb-[32px] flex flex-col items-center">
-        <div className="w-full h-[4px] bg-accent-primary mb-[12px]" />
-        <h1 className="text-h1 text-text-primary mb-[12px]">Customer Success</h1>
-        <p className="text-body-lg text-text-secondary">
-          Experience the future of support. Intelligent agents ready 24/7.
+      <div className="text-center mb-10 flex flex-col items-center">
+        <div className="w-full h-[1px] bg-gradient-to-r from-transparent via-accent-primary/50 to-transparent mb-8" />
+        <h1 className="text-h1 tracking-tighter bg-gradient-to-r from-text-primary to-text-secondary bg-clip-text text-transparent">
+          Support
+        </h1>
+        <p className="text-body-reg text-text-tertiary mt-2 tracking-wide font-medium">
+          Intelligent agents · Ready 24/7
         </p>
       </div>
 
@@ -255,18 +257,18 @@ export const SupportForm: React.FC = () => {
           disabled={status === 'loading'}
         />
 
-        <div className="mt-xl">
+        <div className="mt-10">
           <Button
             type="submit"
-            className="w-full"
+            className="w-full py-4 rounded-xl text-body-reg font-black uppercase tracking-[0.2em] shadow-lg shadow-accent-primary/10 transition-all hover:shadow-accent-primary/20"
             isLoading={status === 'loading'}
             disabled={status === 'loading' || Object.values(errors).some(e => e !== '') || Object.keys(touched).length < Object.keys(formData).length}
           >
-            Submit Support Request
+            Initialize Support Session
           </Button>
           {status === 'loading' && (
-            <p className="text-body-sm text-text-tertiary text-center mt-sm">
-              Submitting your request...
+            <p className="text-[10px] text-text-quaternary text-center mt-4 font-bold uppercase tracking-widest animate-pulse">
+              Encrypting session telemetry...
             </p>
           )}
         </div>
